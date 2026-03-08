@@ -75,6 +75,67 @@ const TimelineItem = ({ week, title, role, desc, icon: Icon, isLast }) => (
   </motion.div>
 );
 
+const SmartCarousel = ({ basePath, setLightboxImage, className = "w-full h-full object-cover absolute top-0 left-0", containerClassName = "relative w-full h-full bg-slate-100 cursor-pointer overflow-hidden group" }) => {
+  const [validImages, setValidImages] = useState([`${basePath}.jpg`, `${basePath}1.jpg`, `${basePath}2.jpg`, `${basePath}3.jpg`]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (validImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % validImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [validImages.length]);
+
+  const handleError = (imgSrc) => {
+    setValidImages(prev => {
+      const filtered = prev.filter(src => src !== imgSrc);
+      if (currentIndex >= filtered.length) {
+        setCurrentIndex(0);
+      }
+      return filtered;
+    });
+  };
+
+  if (validImages.length === 0) {
+    return (
+      <div className={`flex flex-col items-center justify-center text-slate-400 text-xs bg-slate-100 ${containerClassName}`}>
+        <Camera size={24} className="mb-2 opacity-50" />
+        Missing images
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={containerClassName}
+      onClick={() => setLightboxImage(validImages[currentIndex])}
+    >
+      {validImages.map((src, idx) => (
+        <img
+          key={src}
+          src={src}
+          alt={`Carousel ${idx}`}
+          className={`${className} transition-all duration-700 ease-in-out group-hover:scale-105 ${idx === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          onError={() => handleError(src)}
+        />
+      ))}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+        <div className="bg-black/50 p-3 rounded-full drop-shadow-lg backdrop-blur-sm">
+          <Search size={24} className="text-white" />
+        </div>
+      </div>
+      {validImages.length > 1 && (
+        <div className="absolute bottom-2 w-full flex justify-center gap-1.5 z-20">
+          {validImages.map((_, i) => (
+            <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'w-4 bg-white shadow-sm' : 'w-1.5 bg-white/50'}`} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 // FIX #2: Moved ProjectDetailModal OUTSIDE the parent component.
 // Defining it inside caused React to unmount/remount the modal DOM on every
 // parent state change (e.g., teamcard hover), resetting scroll position and
@@ -191,7 +252,7 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {[
                     { l: 'Who', v: w1.who }, { l: 'What', v: w1.what }, { l: 'Where', v: w1.where },
-                    { l: 'When', v: w1.when }, { l: 'Why (Overview)', v: w1.why }, { l: 'How', v: w1.how }
+                    { l: 'When', v: w1.when }, { l: 'Why', v: w1.why5w1h || w1.why }, { l: 'How', v: w1.how }
                   ].map((it, i) => (
                     <div key={i} className="bg-slate-50 p-3 rounded-xl border border-slate-100">
                       <span className="text-xs font-black text-indigo-400 mb-1 block">{it.l}</span>
@@ -712,6 +773,7 @@ export default function ShowcaseLanding() {
   const [isFetching, setIsFetching] = useState(true);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [activeFrameworkCard, setActiveFrameworkCard] = useState(null);
+  const [lightboxImage, setLightboxImage] = useState(null);
 
   useEffect(() => {
     const teamsRef = collection(db, 'artifacts', appId, 'public', 'data', 'teams');
@@ -748,6 +810,36 @@ export default function ShowcaseLanding() {
           to   { opacity: 1; transform: scale(1); }
         }
       `}</style>
+
+      {/* Fullscreen Lightbox */}
+      <AnimatePresence>
+        {lightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm cursor-zoom-out"
+            onClick={() => setLightboxImage(null)}
+          >
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition z-[210]"
+            >
+              <X size={32} />
+            </button>
+            <motion.img
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", bounce: 0.3 }}
+              src={lightboxImage}
+              className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl relative z-[205] cursor-default"
+              alt="Enlarged view"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 1. Navigation — z-40 keeps it below the modal (z-[100]) */}
       <nav className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -905,14 +997,14 @@ export default function ShowcaseLanding() {
             {/* Right: Actual Image */}
             <div className="flex flex-col gap-6">
               <div className="rounded-2xl shadow-xl overflow-hidden border-4 border-white">
-                <img src="/problems/problem-activity.jpg" alt="Problem Activity" className="w-full h-auto object-cover hover:scale-105 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="bg-slate-100 min-h-[240px] flex items-center justify-center text-slate-400"><p>Image missing: /problems/problem-activity.jpg</p></div>'; }} />
+                <SmartCarousel basePath="/problems/problem-activity" setLightboxImage={setLightboxImage} containerClassName="relative w-full aspect-video sm:aspect-[4/3] bg-slate-100 cursor-pointer overflow-hidden group" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-2xl shadow-md overflow-hidden border-4 border-white">
-                  <img src="/problems/problem-copying.jpg" alt="Problem Copying" className="w-full h-auto object-cover hover:scale-105 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="bg-slate-100 min-h-[160px] flex flex-col items-center justify-center text-slate-400 text-xs text-center p-2"><Camera size={24} className="mb-1"/>Image missing:<br/>/problems/problem-copying.jpg</div>'; }} />
+                  <SmartCarousel basePath="/problems/problem-copying" setLightboxImage={setLightboxImage} containerClassName="relative w-full aspect-video sm:aspect-[4/3] bg-slate-100 cursor-pointer overflow-hidden group" />
                 </div>
                 <div className="rounded-2xl shadow-md overflow-hidden border-4 border-white">
-                  <img src="/problems/problem-paper.jpg" alt="Problem Paper" className="w-full h-auto object-cover hover:scale-105 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="bg-slate-100 min-h-[160px] flex flex-col items-center justify-center text-slate-400 text-xs text-center p-2"><FileWarning size={24} className="mb-1"/>Image missing:<br/>/problems/problem-paper.jpg</div>'; }} />
+                  <SmartCarousel basePath="/problems/problem-paper" setLightboxImage={setLightboxImage} containerClassName="relative w-full aspect-video sm:aspect-[4/3] bg-slate-100 cursor-pointer overflow-hidden group" />
                 </div>
               </div>
             </div>
@@ -1214,18 +1306,19 @@ export default function ShowcaseLanding() {
                 </p>
               </div>
 
-              <div className="bg-slate-800 text-white p-6 rounded-2xl shadow-lg">
-                <h3 className="font-bold text-amber-400 mb-4 flex items-center gap-2 border-b border-slate-700 pb-3">
-                  <Download size={20} /> เอกสารประกอบการวิจัย (แผนการสอน)
-                </h3>
+              <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-6">
+                <h4 className="font-bold text-slate-800 mb-4">ดาวน์โหลดเอกสารงานวิจัยและแผนการสอน</h4>
                 <div className="space-y-3">
-                  {[1, 2, 3, 4, 5].map(w => (
-                    <a key={w} href={`/downloads/lesson-plan-${w}.pdf`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-3 rounded-lg bg-slate-700/50 hover:bg-slate-600 transition group border border-slate-600 hover:border-amber-400/50">
-                      <div className="flex items-center gap-3">
-                        <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:text-amber-400 group-hover:bg-slate-900 transition">แผน {w}</span>
-                        <span className="text-sm font-medium group-hover:text-white transition">สัปดาห์ที่ {w}</span>
-                      </div>
-                      <ArrowRight size={16} className="text-slate-500 group-hover:text-amber-400 transition transform group-hover:translate-x-1" />
+                  {[
+                    { file: "lesson-plan-1.pdf", title: "แผนที่ 6: การระบุและวิเคราะห์ปัญหา (Week 1)" },
+                    { file: "lesson-plan-2.pdf", title: "แผนที่ 7: การรวบรวมข้อมูลและวางแผนแก้ปัญหา (Week 2)" },
+                    { file: "lesson-plan-3.pdf", title: "แผนที่ 8: ดำเนินการแก้ไขปัญหา (Week 3)" },
+                    { file: "lesson-plan-4.pdf", title: "แผนที่ 9: การทดสอบและประเมินผล (Week 4)" },
+                    { file: "lesson-plan-5.pdf", title: "แผนที่ 10: การนำเสนอและประเมินผลรวบยอด (Week 5)" }
+                  ].map((plan, idx) => (
+                    <a key={idx} href={`/downloads/${plan.file}`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 hover:-translate-y-1 transition-all duration-200 text-sm group shadow-sm">
+                      <span className="font-medium text-slate-700 group-hover:text-blue-800">{plan.title}</span>
+                      <Download size={18} className="text-blue-600 group-hover:scale-110 transition-transform" />
                     </a>
                   ))}
                 </div>
@@ -1236,11 +1329,11 @@ export default function ShowcaseLanding() {
             <div className="lg:col-span-8 pl-4 lg:pl-8 border-l-2 border-slate-100">
               <div className="space-y-12">
                 {[
-                  { w: 1, title: 'การระบุและวิเคราะห์ปัญหา', phase: 'Engage', icon: Search, img: '/methodology/week1-problem.jpg', desc: 'นักเรียนระบุปัญหาด้วยกรอบ 5W1H และวิเคราะห์สาเหตุที่แท้จริงด้วยเทคนิค 5 Whys' },
-                  { w: 2, title: 'รวบรวมข้อมูลและออกแบบชิ้นงาน', phase: 'Explore', icon: Lightbulb, img: '/methodology/week2-design.jpg', desc: 'ออกแบบชิ้นงาน (Blueprint) และประเมินความเป็นไปได้ผ่านตาราง Decision Matrix' },
-                  { w: 3, title: 'ลงมือสร้างและบันทึกตามสภาพจริง', phase: 'Explain', icon: Wrench, img: '/methodology/week3-maker.jpg', desc: 'สร้างชิ้นงานและบันทึกภาพถ่ายแต่ละขั้นตอนใน Construction Log แบบเรียลไทม์' },
-                  { w: 4, title: 'ทดสอบประสิทธิภาพและปรับปรุง', phase: 'Elaborate', icon: CheckCircle, img: '/methodology/week4-test.jpg', desc: 'ทดสอบชิ้นงาน บันทึกข้อบกพร่อง (Defect Log) และจัดทำแผนปรับปรุง (Redesign Plan)' },
-                  { w: 5, title: 'นำเสนอผลงานและสะท้อนคิด', phase: 'Evaluate', icon: Presentation, img: '/methodology/week5-pitch.jpg', desc: 'ระบบแปลงร่องรอยเป็นแฟ้มสะสมงาน นำเสนอ (Pitching) และสะท้อนคิด (Reflection)' }
+                  { w: 1, title: 'การระบุและวิเคราะห์ปัญหา', phase: 'Engage', icon: Search, slug: 'week1-problem', desc: 'นักเรียนระบุปัญหาด้วยกรอบ 5W1H และวิเคราะห์สาเหตุที่แท้จริงด้วยเทคนิค 5 Whys' },
+                  { w: 2, title: 'รวบรวมข้อมูลและออกแบบชิ้นงาน', phase: 'Explore', icon: Lightbulb, slug: 'week2-design', desc: 'ออกแบบชิ้นงาน (Blueprint) และประเมินความเป็นไปได้ผ่านตาราง Decision Matrix' },
+                  { w: 3, title: 'ลงมือสร้างและบันทึกตามสภาพจริง', phase: 'Explain', icon: Wrench, slug: 'week3-maker', desc: 'สร้างชิ้นงานและบันทึกภาพถ่ายแต่ละขั้นตอนใน Construction Log แบบเรียลไทม์' },
+                  { w: 4, title: 'ทดสอบประสิทธิภาพและปรับปรุง', phase: 'Elaborate', icon: CheckCircle, slug: 'week4-test', desc: 'ทดสอบชิ้นงาน บันทึกข้อบกพร่อง (Defect Log) และจัดทำแผนปรับปรุง (Redesign Plan)' },
+                  { w: 5, title: 'นำเสนอผลงานและสะท้อนคิด', phase: 'Evaluate', icon: Presentation, slug: 'week5-pitch', desc: 'ระบบแปลงร่องรอยเป็นแฟ้มสะสมงาน นำเสนอ (Pitching) และสะท้อนคิด (Reflection)' }
                 ].map((step, i) => (
                   <div key={i} className="relative flex flex-col sm:flex-row gap-6 group">
                     <div className="absolute top-8 -left-[2.15rem] lg:-left-[2.65rem] w-4 h-4 rounded-full bg-slate-200 border-4 border-white group-hover:bg-blue-500 transition-colors z-10 hidden sm:block"></div>
@@ -1256,8 +1349,8 @@ export default function ShowcaseLanding() {
                         <p className="text-sm text-slate-600 leading-relaxed mb-4">{step.desc}</p>
                       </div>
 
-                      <div className="w-full md:w-48 h-32 shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
-                        <img src={step.img} alt={`Week ${step.w}`} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-center text-slate-400 text-[10px] text-center p-2"><Camera size={20} class="mb-1 opacity-50"/>Missing: ${step.img.split('/').pop()}</div>`; }} />
+                      <div className="relative w-full md:w-48 h-40 shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 group/img cursor-pointer">
+                        <SmartCarousel basePath={`/methodology/${step.slug}`} setLightboxImage={setLightboxImage} containerClassName="relative w-full h-full bg-slate-100 cursor-pointer overflow-hidden group" />
                       </div>
                     </div>
                   </div>
@@ -1410,59 +1503,111 @@ export default function ShowcaseLanding() {
         </div>
       </section>
 
-      {/* 8. Footer & Team */}
-      <footer className="bg-slate-900 pt-16 pb-8 border-t border-slate-800">
-        <div className="max-w-6xl mx-auto px-4">
-          <SectionHeading
-            title={<span className="text-white">คณะผู้วิจัยและที่ปรึกษา</span>}
-            subtitle={<span className="text-slate-400">คณะทำงานผู้พัฒนาระบบและการจัดการเรียนรู้</span>}
-          />
+      {/* Section พิเศษ: คณะผู้จัดทำและผู้เชี่ยวชาญ (The Advisory Team) */}
+      <section className="w-full py-20 bg-white border-t border-slate-200">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
+          <SectionHeading title="คณะผู้วิจัยและที่ปรึกษา" subtitle="ขอขอบพระคุณอาจารย์ที่ปรึกษา ครูพี่เลี้ยง และผู้เชี่ยวชาญที่ให้ความอนุเคราะห์ในการวิจัย" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 mb-16">
-            {/* Researcher */}
-            <div className="flex flex-col items-center text-center">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-700 hover:border-blue-500 transition-colors mb-4 bg-slate-800">
-                <img src="/team/researcher.jpg" alt="Researcher" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500"><User size={40}/></div>'; }} />
+          {/* แถวที่ 1: ผู้วิจัย & ที่ปรึกษา */}
+          <div className="flex flex-wrap justify-center gap-10 mt-12 w-full">
+            {/* ผู้วิจัย */}
+            <div className="flex flex-col items-center text-center group w-full sm:w-64 md:w-72 px-2">
+              <div className="w-32 h-32 shrink-0 rounded-full overflow-hidden mb-4 border-4 border-blue-100 shadow-md group-hover:scale-105 transition-transform bg-slate-50 flex items-center justify-center">
+                <img src="/team/1.jpg" alt="นายบุญวิชญ์ ปวโรภาส" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
               </div>
-              <h4 className="text-lg font-bold text-white mb-1">นายบุญวิชญ์ ปวโรภาส</h4>
-              <p className="text-blue-400 text-sm font-semibold mb-2">ผู้วิจัยและพัฒนานวัตกรรม</p>
-              <p className="text-slate-400 text-xs leading-relaxed max-w-[250px]">
-                นิสิตปริญญาตรี สาขาวิชาเทคโนโลยีดิจิทัลเพื่อการศึกษา คณะศึกษาศาสตร์ มหาวิทยาลัยเกษตรศาสตร์
-              </p>
+              <h4 className="font-bold text-slate-800 text-lg md:text-xl break-words w-full">นายบุญวิชญ์ ปวโรภาส</h4>
+              <p className="text-sm text-blue-600 font-medium mb-1 break-words w-full">ผู้วิจัย</p>
+              <p className="text-xs text-slate-500 break-words w-full">นิสิตสาขาเทคโนโลยีดิจิทัลเพื่อการศึกษา<br />มหาวิทยาลัยเกษตรศาสตร์</p>
             </div>
 
-            {/* Advisor */}
-            <div className="flex flex-col items-center text-center">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-700 hover:border-emerald-500 transition-colors mb-4 bg-slate-800">
-                <img src="/team/advisor.jpg" alt="Advisor" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500"><User size={40}/></div>'; }} />
+            {/* อาจารย์ที่ปรึกษา */}
+            <div className="flex flex-col items-center text-center group w-full sm:w-64 md:w-80 px-2">
+              <div className="w-32 h-32 shrink-0 rounded-full overflow-hidden mb-4 border-4 border-amber-100 shadow-md group-hover:scale-105 transition-transform bg-slate-50 flex items-center justify-center">
+                <img src="/team/2.jpg" alt="ผศ. ดร. ณัฏฐ์วิชิดา เลิศพงศ์รุจิกร" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
               </div>
-              <h4 className="text-lg font-bold text-white mb-1">ผศ.ดร. ภาคภูมิ เย็นบำรุง</h4>
-              <p className="text-emerald-400 text-sm font-semibold mb-2">อาจารย์ที่ปรึกษางานวิจัย</p>
-              <p className="text-slate-400 text-xs leading-relaxed max-w-[250px]">
-                อาจารย์ประจำภาควิชาเทคโนโลยีการศึกษา คณะศึกษาศาสตร์ มหาวิทยาลัยเกษตรศาสตร์
-              </p>
-            </div>
-
-            {/* Mentor */}
-            <div className="flex flex-col items-center text-center">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-700 hover:border-purple-500 transition-colors mb-4 bg-slate-800">
-                <img src="/team/mentor.jpg" alt="Mentor" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500"><User size={40}/></div>'; }} />
-              </div>
-              <h4 className="text-lg font-bold text-white mb-1">นายกิตติศัพดิ์ ซื่อตรง</h4>
-              <p className="text-purple-400 text-sm font-semibold mb-2">ครูพี่เลี้ยง (Mentor)</p>
-              <p className="text-slate-400 text-xs leading-relaxed max-w-[250px]">
-                ครูหัวหน้ากลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี โรงเรียนหอวัง
-              </p>
+              <h4 className="font-bold text-slate-800 text-lg md:text-xl break-words w-full leading-snug">ผศ. ดร. ณัฏฐ์วิชิดา เลิศพงศ์รุจิกร</h4>
+              <p className="text-sm text-amber-600 font-medium mb-1 mt-1 break-words w-full">อาจารย์ที่ปรึกษางานวิจัย</p>
+              <p className="text-xs text-slate-500 break-words w-full">คณะศึกษาศาสตร์<br />มหาวิทยาลัยเกษตรศาสตร์</p>
             </div>
           </div>
+
+          {/* แถวที่ 2: ครูพี่เลี้ยง */}
+          <div className="mt-20 text-center w-full">
+            <h3 className="text-xl font-bold text-slate-700 mb-8 border-b-2 border-emerald-200 inline-block pb-2 px-8">ครูพี่เลี้ยง</h3>
+            <div className="flex flex-wrap justify-center gap-10 w-full">
+              {/* ครูพี่เลี้ยง 1 */}
+              <div className="flex flex-col items-center text-center group w-full sm:w-60 md:w-72 px-2">
+                <div className="w-28 h-28 shrink-0 rounded-full overflow-hidden mb-4 border-4 border-emerald-100 shadow-md group-hover:scale-105 transition-transform bg-slate-50 flex items-center justify-center">
+                  <img src="/team/3.jpg" alt="นางสาวอณิมา รอตเสียงล้ำ" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+                <h4 className="font-bold text-slate-800 text-base md:text-lg break-words w-full">นางสาวอณิมา รอตเสียงล้ำ</h4>
+                <p className="text-sm text-emerald-600 font-medium mb-1 break-words w-full">ครูพี่เลี้ยง</p>
+                <p className="text-xs text-slate-500 break-words w-full">ครูชำนาญการพิเศษ<br />โรงเรียนหอวัง</p>
+              </div>
+
+              {/* ครูพี่เลี้ยง 2 */}
+              <div className="flex flex-col items-center text-center group w-full sm:w-60 md:w-72 px-2">
+                <div className="w-28 h-28 shrink-0 rounded-full overflow-hidden mb-4 border-4 border-emerald-100 shadow-md group-hover:scale-105 transition-transform bg-slate-50 flex items-center justify-center">
+                  <img src="/team/4.jpg" alt="นางสาวประภัสสร ดลดุสิตา" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+                <h4 className="font-bold text-slate-800 text-base md:text-lg break-words w-full">นางสาวประภัสสร ดลดุสิตา</h4>
+                <p className="text-sm text-emerald-600 font-medium mb-1 break-words w-full">ครูพี่เลี้ยง</p>
+                <p className="text-xs text-slate-500 break-words w-full">ครูชำนาญการพิเศษ<br />โรงเรียนหอวัง</p>
+              </div>
+            </div>
+          </div>
+
+          {/* แถวที่ 3: ผู้เชี่ยวชาญ */}
+          <div className="mt-20 text-center w-full">
+            <h3 className="text-xl font-bold text-slate-700 mb-8 border-b-2 border-purple-200 inline-block pb-2 px-8">ผู้เชี่ยวชาญประเมินเครื่องมือวิจัย (IOC)</h3>
+            <div className="flex flex-wrap justify-center gap-10 w-full">
+              {/* ผู้เชี่ยวชาญ 1 */}
+              <div className="flex flex-col items-center text-center group w-full sm:w-60 md:w-72 px-2">
+                <div className="w-28 h-28 shrink-0 rounded-full overflow-hidden mb-4 border-4 border-purple-100 shadow-md group-hover:scale-105 transition-transform bg-slate-50 flex items-center justify-center">
+                  <img src="/team/5.jpg" alt="นายชำนาญ เปตามะนัง" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+                <h4 className="font-bold text-slate-800 text-base md:text-lg break-words w-full">นายชำนาญ เปตามะนัง</h4>
+                <p className="text-sm text-purple-600 font-medium mb-1 break-words w-full">ผู้เชี่ยวชาญ</p>
+                <p className="text-xs text-slate-500 break-words w-full">ครูชำนาญการ / หัวหน้างานคอมพิวเตอร์<br />โรงเรียนหอวัง</p>
+              </div>
+
+              {/* ผู้เชี่ยวชาญ 2 */}
+              <div className="flex flex-col items-center text-center group w-full sm:w-60 md:w-72 px-2">
+                <div className="w-28 h-28 shrink-0 rounded-full overflow-hidden mb-4 border-4 border-purple-100 shadow-md group-hover:scale-105 transition-transform bg-slate-50 flex items-center justify-center">
+                  <img src="/team/6.jpg" alt="นางสาววรวรรณ แซ่ซิ้ม" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+                <h4 className="font-bold text-slate-800 text-base md:text-lg break-words w-full">นางสาววรวรรณ แซ่ซิ้ม</h4>
+                <p className="text-sm text-purple-600 font-medium mb-1 break-words w-full">ผู้เชี่ยวชาญ</p>
+                <p className="text-xs text-slate-500 break-words w-full">ครูชำนาญการพิเศษ<br />โรงเรียนหอวัง</p>
+              </div>
+
+              {/* ผู้เชี่ยวชาญ 3 */}
+              <div className="flex flex-col items-center text-center group w-full sm:w-60 md:w-72 px-2">
+                <div className="w-28 h-28 shrink-0 rounded-full overflow-hidden mb-4 border-4 border-purple-100 shadow-md group-hover:scale-105 transition-transform bg-slate-50 flex items-center justify-center">
+                  <img src="/team/7.jpg" alt="นางสาววิมล สายทองมี" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+                <h4 className="font-bold text-slate-800 text-base md:text-lg break-words w-full">นางสาววิมล สายทองมี</h4>
+                <p className="text-sm text-purple-600 font-medium mb-1 break-words w-full">ผู้เชี่ยวชาญ</p>
+                <p className="text-xs text-slate-500 break-words w-full">ครูชำนาญการ<br />โรงเรียนหอวัง</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 8. Footer */}
+      <footer className="bg-slate-900 pt-16 pb-8 border-t border-slate-800">
+        <div className="max-w-6xl mx-auto px-4">
 
           {/* Test Credentials & QR Code */}
           <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 justify-center shadow-xl mb-16 relative overflow-hidden">
             <div className="absolute -left-16 -bottom-16 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl"></div>
 
-            <div className="w-48 h-48 bg-white p-2 text-center rounded-2xl shrink-0 shadow-lg rotate-[-2deg] hover:rotate-0 transition-transform flex flex-col items-center justify-between border-4 border-slate-700">
-              <img src="/qrcode.png" alt="System QR Code" className="w-full h-full object-contain" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full flex-1 flex flex-col items-center justify-center text-slate-300 bg-slate-50 rounded"><Activity size={32} class="mb-2"/>ไม่พบ QR Code<br/>(/qrcode.png)</div>'; }} />
-              <span className="text-slate-900 font-bold text-xs mt-1 block w-full bg-slate-100 py-1 rounded">สแกนเพื่อทดลองใช้</span>
+            <div className="w-48 h-48 bg-white p-2 text-center rounded-2xl shrink-0 shadow-lg rotate-[-2deg] hover:rotate-0 transition-transform flex flex-col items-center justify-center border-4 border-slate-700 relative">
+              <Activity size={32} className="text-slate-300 absolute" />
+              <img src="/qrcode.png" alt="System QR Code" className="w-full h-full object-contain relative z-10" onError={(e) => { e.target.style.display = 'none'; }} />
+              <span className="text-slate-900 font-bold text-xs mt-1 block w-full bg-slate-100 py-1 rounded relative z-10">สแกนเพื่อทดลองใช้</span>
             </div>
 
             <div className="text-center md:text-left relative z-10">
