@@ -81,6 +81,7 @@ const TimelineItem = ({ week, title, role, desc, icon: Icon, isLast }) => (
 // triggering flicker. Passing selectedTeam & onClose as props is the correct pattern.
 const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
   const [activeTab, setActiveTab] = useState('w1');
+  const [lightboxImage, setLightboxImage] = useState(null);
 
   if (!selectedTeam) return null;
 
@@ -107,9 +108,20 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
     { id: 'ref', label: 'Reflection', icon: Star },
   ];
 
+  const ImageLightbox = () => {
+    if (!lightboxImage) return null;
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm" onClick={() => setLightboxImage(null)}>
+        <button onClick={() => setLightboxImage(null)} className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition"><X size={32} /></button>
+        <img src={lightboxImage} className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl animate-in zoom-in duration-200" alt="Fullscreen Evidence" />
+      </div>
+    );
+  };
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-slate-900/80 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-slate-50 w-full max-w-6xl max-h-[95vh] h-full sm:h-auto sm:max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ animation: 'modalPop 0.2s ease-out both' }} onClick={e => e.stopPropagation()}>
+      <ImageLightbox />
+      <div className="bg-slate-50 w-[96vw] max-w-7xl h-[96vh] sm:h-[90vh] lg:aspect-video rounded-2xl shadow-2xl overflow-hidden flex flex-col relative" style={{ animation: 'modalPop 0.2s ease-out both' }} onClick={e => e.stopPropagation()}>
 
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-900 to-indigo-900 p-5 shrink-0 flex justify-between items-start text-white">
@@ -165,9 +177,10 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
                   </div>
                 </div>
                 {w1.problemImage && (
-                  <div className="md:w-1/3 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-                    <img src={w1.problemImage} alt="Problem" className="w-full h-40 object-cover rounded-xl" />
-                    <span className="text-xs text-slate-500 mt-2 font-medium">ภาพประกอบปัญหา</span>
+                  <div className="md:w-1/3 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center relative group cursor-pointer" onClick={() => setLightboxImage(w1.problemImage)}>
+                    <img src={w1.problemImage} alt="Problem" className="w-full h-40 object-cover rounded-xl group-hover:opacity-80 transition" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-none"><Search size={32} className="text-white drop-shadow-lg" /></div>
+                    <span className="text-xs text-slate-500 mt-2 font-medium">ภาพประกอบปัญหา (Click to Expand)</span>
                   </div>
                 )}
               </div>
@@ -203,6 +216,30 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
                 <div className="bg-gradient-to-r from-red-50 text-red-900 to-orange-50 p-4 rounded-xl border border-red-200 shadow-inner">
                   <span className="text-xs font-black text-red-500 uppercase block mb-1">Root Cause (สาเหตุที่แท้จริง)</span>
                   <p className="font-bold text-lg">{w1.rootCause || <span className="text-red-300 italic">ไม่มีข้อมูล</span>}</p>
+                </div>
+              </div>
+
+              {/* Peer Ratings (W1) */}
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h3 className="font-bold text-lg text-pink-900 mb-4 border-b pb-2 flex items-center gap-2"><Users size={20} /> Peer Ratings (ประเมินไอเดียจากทีมอื่น)</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {Array.isArray(w1.peerRatings) && w1.peerRatings.length > 0 ? (
+                    w1.peerRatings.map((pr, i) => (
+                      <div key={i} className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
+                        <div className="flex items-center gap-2 font-bold text-blue-900">
+                          <User size={16} /> <span className="text-sm">{pr.evaluatorName || 'ผู้ประเมินไม่ระบุชื่อ'}</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-xs font-semibold text-slate-500">
+                          <span className="flex items-center gap-1">ความชัดเจน: <Star size={12} className="text-amber-400" fill="currentColor" />{pr.clarityScore || '-'}</span>
+                          <span className="flex items-center gap-1">ความสมเหตุสมผล: <Star size={12} className="text-amber-400" fill="currentColor" />{pr.logicScore || '-'}</span>
+                          <span className="flex items-center gap-1">การนำเสนอ: <Star size={12} className="text-amber-400" fill="currentColor" />{pr.presentationScore || '-'}</span>
+                        </div>
+                        <div className="text-sm text-slate-600 bg-white p-2 border border-slate-100 rounded italic mt-2">
+                          "{pr.feedback || 'ไม่มีข้อเสนอแนะเพิ่มเติม'}"
+                        </div>
+                      </div>
+                    ))
+                  ) : <p className="text-sm text-slate-400 italic">ยังไม่มีการประเมินจากเพื่อนร่วมชั้น</p>}
                 </div>
               </div>
             </div>
@@ -244,14 +281,52 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
               {/* Images & BOM */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                  <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2 flex items-center gap-2"><ImageIcon size={20} /> แบบร่าง (Blueprint / UserFlow)</h3>
-                  <div className="flex flex-col gap-4">
-                    {w2.blueprintImage ? (
-                      <div><span className="text-xs font-bold text-slate-500 mb-1 block">Blueprint:</span><img src={w2.blueprintImage} alt="Blueprint" className="w-full h-40 object-contain bg-slate-50 rounded-lg border" /></div>
-                    ) : <p className="text-sm text-slate-400 italic">ไม่มีรูปภาพ Blueprint</p>}
-                    {w2.userFlowImage ? (
-                      <div><span className="text-xs font-bold text-slate-500 mb-1 block">User Flow:</span><img src={w2.userFlowImage} alt="UserFlow" className="w-full h-40 object-contain bg-slate-50 rounded-lg border" /></div>
-                    ) : null}
+                  <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2 flex items-center gap-2"><ImageIcon size={20} /> ภาพร่าง (Wireframes / UserFlow)</h3>
+                  <div className="flex flex-col gap-6">
+                    {(w2.userFlowImage || w2.blueprintImage) && (
+                      <div>
+                        <span className="text-xs font-bold text-slate-500 mb-2 block">User Flow & Blueprint:</span>
+                        <div className="relative group cursor-pointer" onClick={() => setLightboxImage(w2.userFlowImage || w2.blueprintImage)}>
+                          <img src={w2.userFlowImage || w2.blueprintImage} alt="UserFlow" className="w-full h-48 object-contain bg-slate-50 rounded-xl border group-hover:opacity-80 transition" />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-none"><Search size={32} className="text-white drop-shadow-lg" /></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {w2.wireframes && (
+                      <div className="mt-2 pt-4 border-t border-slate-100">
+                        <span className="text-xs font-bold text-slate-500 mb-3 block">Wireframes (หน้าจอฉบับร่าง):</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {['home', 'action', 'result'].map(k => w2.wireframes[k] ? (
+                            <div key={k} className="flex flex-col gap-1">
+                              <div className="relative group cursor-pointer" onClick={() => setLightboxImage(w2.wireframes[k])}>
+                                <img src={w2.wireframes[k]} alt={`Wireframe ${k}`} className="w-full h-24 object-cover bg-slate-50 rounded border group-hover:opacity-80 transition" />
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-none"><Search size={16} className="text-white shadow-sm" /></div>
+                              </div>
+                              <span className="text-[10px] font-bold text-slate-400 uppercase text-center">{k}</span>
+                              {w2.wireframeNotes && w2.wireframeNotes[k] && (
+                                <div className="text-[10px] text-slate-600 text-left w-full leading-tight bg-slate-50 p-2 rounded border border-slate-100/50">
+                                  {typeof w2.wireframeNotes[k] === 'object' && w2.wireframeNotes[k] !== null ? (
+                                    <div className="space-y-1">
+                                      {w2.wireframeNotes[k].action && <p><span className="font-bold text-slate-700">Action:</span> {w2.wireframeNotes[k].action}</p>}
+                                      {w2.wireframeNotes[k].reaction && <p><span className="font-bold text-slate-700">Reaction:</span> {w2.wireframeNotes[k].reaction}</p>}
+                                      {w2.wireframeNotes[k].description && <p>{w2.wireframeNotes[k].description}</p>}
+                                      {!w2.wireframeNotes[k].action && !w2.wireframeNotes[k].reaction && !w2.wireframeNotes[k].description && <p className="text-center italic text-slate-400">"{JSON.stringify(w2.wireframeNotes[k])}"</p>}
+                                    </div>
+                                  ) : (
+                                    <p className="text-center">"{w2.wireframeNotes[k]}"</p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ) : null)}
+                        </div>
+                      </div>
+                    )}
+
+                    {!w2.userFlowImage && !w2.blueprintImage && !w2.wireframes && (
+                      <p className="text-sm text-slate-400 italic">ไม่มีข้อมูลการออกแบบ</p>
+                    )}
                   </div>
                 </div>
 
@@ -332,21 +407,47 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
               </div>
 
               <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2 flex items-center gap-2"><ImageIcon size={20} /> หลักฐานการปฏิบัติงาน</h3>
-                {w3.workImages?.length > 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {w3.workImages.map((img, i) => (
-                      <img key={i} src={img?.url || img} alt={`work-${i}`} className="w-full h-32 object-cover rounded-xl border border-slate-200" onError={e => e.target.style.display = 'none'} />
-                    ))}
-                  </div>
-                ) : <p className="text-sm text-slate-400 italic">ไม่มีรูปภาพการทำงาน</p>}
+                <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2 flex items-center gap-2"><ImageIcon size={20} /> แกลเลอรี่ผลงาน (Galleries)</h3>
 
-                {w3.cleanupImage && (
-                  <div className="mt-6 pt-6 border-t border-slate-100">
-                    <span className="text-sm font-bold text-slate-700 mb-2 block">ภาพเก็บกวาดสถานที่ (Clean-up)</span>
-                    <img src={w3.cleanupImage} alt="Cleanup" className="w-48 h-32 object-cover rounded-xl border border-slate-200" />
+                <div className="space-y-6">
+                  <div>
+                    <span className="text-sm font-bold text-slate-700 mb-3 block">ภาพเบื้องหลังการทำงาน (Working Process)</span>
+                    {Array.isArray(w3.workImages) && w3.workImages.length > 0 ? (
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {w3.workImages.map((img, i) => (
+                          <div key={i} className="relative group cursor-pointer rounded-xl overflow-hidden border border-slate-200" onClick={() => setLightboxImage(img?.url || img)}>
+                            <img src={img?.url || img} alt={`work-${i}`} className="w-full h-32 object-cover group-hover:scale-105 transition duration-300" onError={e => e.target.style.display = 'none'} />
+                            <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/20 transition flex items-center justify-center"><Search size={24} className="text-white opacity-0 group-hover:opacity-100 transition drop-shadow-md" /></div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : <p className="text-sm text-slate-400 italic">ไม่มีรูปภาพบรรยากาศการทำงาน</p>}
                   </div>
-                )}
+
+                  {Array.isArray(w3.appScreenshots) && w3.appScreenshots.length > 0 && (
+                    <div className="pt-6 border-t border-slate-100">
+                      <span className="text-sm font-bold text-slate-700 mb-3 block">ภาพหน้าจอซอฟต์แวร์ (UI Screenshots)</span>
+                      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                        {w3.appScreenshots.map((img, i) => (
+                          <div key={i} className="relative group cursor-pointer rounded-xl overflow-hidden border border-slate-200 shadow-sm" onClick={() => setLightboxImage(img?.url || img)}>
+                            <img src={img?.url || img} alt={`ui-${i}`} className="w-full h-40 object-cover group-hover:scale-105 transition duration-300 object-top" onError={e => e.target.style.display = 'none'} />
+                            <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/30 transition flex items-center justify-center"><Search size={24} className="text-white opacity-0 group-hover:opacity-100 transition drop-shadow-md" /></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {w3.cleanupImage && (
+                    <div className="pt-6 border-t border-slate-100">
+                      <span className="text-sm font-bold text-slate-700 mb-2 block">ภาพเก็บกวาดสถานที่ (Clean-up)</span>
+                      <div className="relative group cursor-pointer inline-block rounded-xl overflow-hidden border border-slate-200" onClick={() => setLightboxImage(w3.cleanupImage)}>
+                        <img src={w3.cleanupImage} alt="Cleanup" className="w-48 h-32 object-cover group-hover:scale-105 transition duration-300" />
+                        <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/20 transition flex items-center justify-center"><Search size={24} className="text-white opacity-0 group-hover:opacity-100 transition drop-shadow-md" /></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -402,19 +503,56 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
                 <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2 flex items-center gap-2"><ImageIcon size={20} /> รูปภาพการทดสอบและการปรับปรุง</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {w4.testEvidenceImage && (
-                    <div><span className="text-xs font-bold text-slate-500 mb-1 block">หลักฐานการทดสอบ (Evidence):</span><img src={w4.testEvidenceImage} className="w-full h-40 object-cover rounded-xl border border-slate-200" alt="Test Evidence" /></div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-500 mb-1 block">หลักฐานการทดสอบ (Evidence):</span>
+                      <div className="relative group cursor-pointer" onClick={() => setLightboxImage(w4.testEvidenceImage)}>
+                        <img src={w4.testEvidenceImage} className="w-full h-40 object-cover rounded-xl border border-slate-200 group-hover:opacity-80 transition" alt="Test Evidence" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-none"><Search size={32} className="text-white drop-shadow-lg" /></div>
+                      </div>
+                    </div>
                   )}
                   {w4.beforeImage && (
-                    <div><span className="text-xs font-bold text-slate-500 mb-1 block">ก่อนปรับปรุง (Before):</span><img src={w4.beforeImage} className="w-full h-40 object-cover rounded-xl border border-slate-200" alt="Before" /></div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-500 mb-1 block">ก่อนปรับปรุง (Before):</span>
+                      <div className="relative group cursor-pointer" onClick={() => setLightboxImage(w4.beforeImage)}>
+                        <img src={w4.beforeImage} className="w-full h-40 object-cover rounded-xl border border-slate-200 group-hover:opacity-80 transition" alt="Before" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-none"><Search size={32} className="text-white drop-shadow-lg" /></div>
+                      </div>
+                    </div>
                   )}
                   {w4.afterImage && (
-                    <div><span className="text-xs font-bold text-slate-500 mb-1 block">หลังปรับปรุง (After):</span><img src={w4.afterImage} className="w-full h-40 object-cover rounded-xl border border-slate-200" alt="After" /></div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-500 mb-1 block">หลังปรับปรุง (After):</span>
+                      <div className="relative group cursor-pointer" onClick={() => setLightboxImage(w4.afterImage)}>
+                        <img src={w4.afterImage} className="w-full h-40 object-cover rounded-xl border border-slate-200 group-hover:opacity-80 transition" alt="After" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-none"><Search size={32} className="text-white drop-shadow-lg" /></div>
+                      </div>
+                    </div>
                   )}
                   {!w4.testEvidenceImage && !w4.beforeImage && !w4.afterImage && (
                     <p className="text-sm text-slate-400 italic">ไม่มีรูปภาพประกอบ</p>
                   )}
                 </div>
               </div>
+
+              {/* Observation Log (W4) */}
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h3 className="font-bold text-lg text-emerald-900 mb-4 border-b pb-2 flex items-center gap-2"><Search size={20} /> บันทึกการสังเกตการณ์ (Observation Log)</h3>
+                <div className="space-y-4">
+                  {Array.isArray(w4.observations) && w4.observations.length > 0 ? (
+                    w4.observations.map((obs, i) => (
+                      <div key={i} className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex gap-4">
+                        <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold shrink-0">{i + 1}</div>
+                        <div>
+                          <p className="text-sm font-bold text-slate-800 mb-1">{typeof obs === 'object' ? (obs.teamObserved || obs.title || `สังเกตการณ์ทีมที่ ${i + 1}`) : `ข้อสังเกตที่ ${i + 1}`}</p>
+                          <p className="text-sm text-slate-600 bg-white p-3 rounded border border-slate-100 italic">"{typeof obs === 'object' ? (obs.detail || obs.notes || obs.text || JSON.stringify(obs)) : obs}"</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : <p className="text-sm text-slate-400 italic">ไม่มีบันทึกการสังเกตการณ์ทีมอื่น</p>}
+                </div>
+              </div>
+
             </div>
           )}
 
@@ -456,6 +594,32 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
                 </div>
               </div>
 
+              {/* Investor Details (W5) */}
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h3 className="font-bold text-lg text-blue-900 mb-4 border-b pb-2 flex items-center gap-2"><Users size={20} /> รายชื่อนักลงทุนและข้อเสนอแนะ (Investors)</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {Array.isArray(w5.investors) && w5.investors.length > 0 ? (
+                    w5.investors.map((inv, i) => (
+                      <div key={i} className="bg-slate-50 p-4 rounded-xl border border-slate-100 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 bg-amber-100 text-amber-700 font-bold px-3 py-1 rounded-bl-xl text-xs flex items-center gap-1">
+                          <Activity size={12} /> +{inv.amount || 0} Coins
+                        </div>
+                        <p className="font-bold text-slate-800 mb-2">{inv.name || 'นักลงทุนไม่ระบุชื่อ'}</p>
+
+                        {inv.ratings && (
+                          <div className="flex flex-wrap gap-2 text-[10px] font-bold text-slate-500 mb-3">
+                            <span className="bg-white px-2 py-1 rounded border border-slate-100 flex items-center gap-1">ความคิดสร้างสรรค์: <Star size={10} className="text-amber-400" fill="currentColor" />{inv.ratings.creativity || '-'}</span>
+                            <span className="bg-white px-2 py-1 rounded border border-slate-100 flex items-center gap-1">ความเป็นไปได้: <Star size={10} className="text-amber-400" fill="currentColor" />{inv.ratings.feasibility || '-'}</span>
+                            <span className="bg-white px-2 py-1 rounded border border-slate-100 flex items-center gap-1">การนำเสนอ: <Star size={10} className="text-amber-400" fill="currentColor" />{inv.ratings.pitching || '-'}</span>
+                          </div>
+                        )}
+                        <p className="text-sm text-slate-600 bg-white p-2 rounded border border-slate-100 italic">"{inv.feedback || 'ไม่มีข้อเสนอแนะ'}"</p>
+                      </div>
+                    ))
+                  ) : <p className="text-sm text-slate-400 italic">ยังไม่มีข้อมูลนักลงทุน</p>}
+                </div>
+              </div>
+
               <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                 <h3 className="font-bold text-lg text-slate-800 mb-4 border-b pb-2 flex items-center gap-2"><ImageIcon size={20} /> ภาพถ่ายผลงานจริง</h3>
                 {w5.finalProductImage ? (
@@ -468,21 +632,29 @@ const ProjectDetailModal = ({ selectedTeam, evaluations = [], onClose }) => {
           {/* TAB 6: Reflection & System Evaluation */}
           {activeTab === 'ref' && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-gradient-to-br from-pink-50 to-purple-50 p-6 rounded-2xl border border-pink-100 shadow-sm flex flex-col items-center justify-center text-center">
                   <span className="text-sm font-bold text-pink-600 mb-2">ความพึงพอใจในผลงานตนเอง</span>
                   <div className="flex text-amber-400 mb-2">
-                    {[1, 2, 3, 4, 5].map(s => <Star key={s} size={32} fill={s <= (ref.selfSatisfaction || 0) ? 'currentColor' : 'transparent'} className={s <= (ref.selfSatisfaction || 0) ? 'text-amber-400' : 'text-slate-300'} />)}
+                    {[1, 2, 3, 4, 5].map(s => <Star key={s} size={24} fill={s <= (ref.selfSatisfaction || 0) ? 'currentColor' : 'transparent'} className={s <= (ref.selfSatisfaction || 0) ? 'text-amber-400' : 'text-slate-300'} />)}
                   </div>
-                  <span className="text-3xl font-black text-pink-900">{ref.selfSatisfaction || 0} / 5</span>
+                  <span className="text-2xl font-black text-pink-900">{ref.selfSatisfaction || 0} / 5</span>
                 </div>
 
                 <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border border-blue-100 shadow-sm flex flex-col items-center justify-center text-center">
                   <span className="text-sm font-bold text-blue-600 mb-2">การทำงานเป็นทีม (Teamwork)</span>
                   <div className="flex text-amber-400 mb-2">
-                    {[1, 2, 3, 4, 5].map(s => <Star key={s} size={32} fill={s <= (ref.teamwork || 0) ? 'currentColor' : 'transparent'} className={s <= (ref.teamwork || 0) ? 'text-amber-400' : 'text-slate-300'} />)}
+                    {[1, 2, 3, 4, 5].map(s => <Star key={s} size={24} fill={s <= (ref.teamwork || 0) ? 'currentColor' : 'transparent'} className={s <= (ref.teamwork || 0) ? 'text-amber-400' : 'text-slate-300'} />)}
                   </div>
-                  <span className="text-3xl font-black text-blue-900">{ref.teamwork || 0} / 5</span>
+                  <span className="text-2xl font-black text-blue-900">{ref.teamwork || 0} / 5</span>
+                </div>
+
+                <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-2xl border border-emerald-100 shadow-sm flex flex-col items-center justify-center text-center">
+                  <span className="text-sm font-bold text-emerald-600 mb-2">ความมั่นใจต่อผลงาน (Confidence)</span>
+                  <div className="flex text-amber-400 mb-2">
+                    {[1, 2, 3, 4, 5].map(s => <Star key={s} size={24} fill={s <= (ref.confidenceLevel || 0) ? 'currentColor' : 'transparent'} className={s <= (ref.confidenceLevel || 0) ? 'text-amber-400' : 'text-slate-300'} />)}
+                  </div>
+                  <span className="text-2xl font-black text-emerald-900">{ref.confidenceLevel || 0} / 5</span>
                 </div>
               </div>
 
