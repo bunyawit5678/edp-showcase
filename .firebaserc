@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "scaffolded-logbook-research"
+  },
+  "targets": {
+    "scaffolded-logbook-research": {
+      "hosting": {
+        "edp-showcase-view": [
+          "edp-showcase-view"
+        ]
+      }
+    }
+  }
+}
