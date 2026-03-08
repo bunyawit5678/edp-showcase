@@ -902,11 +902,19 @@ export default function ShowcaseLanding() {
                 </div>
               </div>
             </div>
-            {/* Right: Image Placeholder */}
-            <div className="bg-slate-100 border-2 border-dashed border-slate-400 rounded-2xl min-h-[360px] flex flex-col items-center justify-center text-slate-400 gap-3 p-8">
-              <Camera size={48} className="text-slate-300" />
-              <p className="text-sm font-medium text-center">ภาพประกอบสภาพปัญหาในชั้นเรียน</p>
-              <p className="text-xs text-center">(ใบงาน / กิจกรรมสะพานต้านแรงโน้มถ่วง)</p>
+            {/* Right: Actual Image */}
+            <div className="flex flex-col gap-6">
+              <div className="rounded-2xl shadow-xl overflow-hidden border-4 border-white">
+                <img src="/problems/problem-activity.jpg" alt="Problem Activity" className="w-full h-auto object-cover hover:scale-105 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="bg-slate-100 min-h-[240px] flex items-center justify-center text-slate-400"><p>Image missing: /problems/problem-activity.jpg</p></div>'; }} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-2xl shadow-md overflow-hidden border-4 border-white">
+                  <img src="/problems/problem-copying.jpg" alt="Problem Copying" className="w-full h-auto object-cover hover:scale-105 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="bg-slate-100 min-h-[160px] flex flex-col items-center justify-center text-slate-400 text-xs text-center p-2"><Camera size={24} className="mb-1"/>Image missing:<br/>/problems/problem-copying.jpg</div>'; }} />
+                </div>
+                <div className="rounded-2xl shadow-md overflow-hidden border-4 border-white">
+                  <img src="/problems/problem-paper.jpg" alt="Problem Paper" className="w-full h-auto object-cover hover:scale-105 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="bg-slate-100 min-h-[160px] flex flex-col items-center justify-center text-slate-400 text-xs text-center p-2"><FileWarning size={24} className="mb-1"/>Image missing:<br/>/problems/problem-paper.jpg</div>'; }} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1169,25 +1177,16 @@ export default function ShowcaseLanding() {
                 </motion.div>
               ))}
             </motion.div>
-            {/* App Image Placeholder */}
+            {/* App Image Actual */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
               whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, type: "spring" }}
-              className="order-1 lg:order-2 bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-200 rounded-3xl min-h-[480px] flex flex-col items-center justify-center text-slate-400 gap-4 p-8 shadow-2xl relative overflow-hidden group"
+              className="order-1 lg:order-2 rounded-3xl overflow-hidden shadow-2xl relative group"
             >
-              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-30"></div>
-              <div className="absolute w-full h-full bg-gradient-to-tr from-white/0 via-white/40 to-white/0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
-
-              <div className="w-24 h-24 bg-white rounded-full shadow-inner flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-500">
-                <TrendingUp size={48} className="text-blue-500" />
-              </div>
-              <div className="relative z-10 text-center">
-                <p className="text-lg font-bold text-slate-700">ภาพประกอบหน้าจอระบบ</p>
-                <p className="text-sm font-medium text-slate-500 mb-1">EDP Smart Logbook</p>
-                <span className="inline-block mt-3 px-4 py-1.5 bg-white text-slate-500 text-xs font-bold rounded-full shadow-sm">Teacher Dashboard / Student Interface</span>
-              </div>
+              <div className="absolute inset-0 bg-blue-900/10 group-hover:bg-transparent transition duration-500 z-10 pointer-events-none"></div>
+              <img src="/framework/research-framework.png" alt="Research Framework" className="w-full h-auto object-cover transform group-hover:scale-[1.02] transition duration-700" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="bg-slate-100 min-h-[480px] flex flex-col items-center justify-center text-slate-400 p-8 text-center border-2 border-dashed border-slate-300 rounded-3xl"><TrendingUp size={48} class="mb-4 text-blue-300"/><p class="font-bold">ภาพแสดงกรอบแนวคิด (Framework)</p><p class="text-xs">/framework/research-framework.png</p></div>'; }} />
             </motion.div>
           </div>
         </div>
@@ -1200,12 +1199,71 @@ export default function ShowcaseLanding() {
             title="กระบวนการจัดการเรียนรู้ (การดำเนินการ 5 สัปดาห์)"
             subtitle="ขั้นตอนการจัดการเรียนรู้แบบสืบเสาะหาความรู้ 5E ร่วมกับระบบ EDP Smart Logbook"
           />
-          <div className="mt-16 ml-4 md:ml-12">
-            <TimelineItem week="1" role="ขั้นสร้างความสนใจ (Engage)" title="สัปดาห์ที่ 1: การระบุและวิเคราะห์ปัญหา" desc="นักเรียนระบุปัญหาด้วยกรอบ 5W1H และวิเคราะห์สาเหตุที่แท้จริงด้วยเทคนิค 5 Whys บันทึกใน EDP Smart Logbook" icon={Search} />
-            <TimelineItem week="2" role="ขั้นสำรวจและค้นหา (Explore)" title="สัปดาห์ที่ 2: รวบรวมข้อมูลและออกแบบชิ้นงาน" desc="นักเรียนรวบรวมข้อมูล ออกแบบชิ้นงาน (วาดแบบร่าง Blueprint) และประเมินความเป็นไปได้ผ่าน Decision Matrix" icon={Lightbulb} />
-            <TimelineItem week="3" role="ขั้นอธิบายและลงข้อสรุป (Explain)" title="สัปดาห์ที่ 3: ลงมือสร้างและบันทึกตามสภาพจริง" desc="นักเรียนลงมือสร้างชิ้นงานและบันทึกหลักฐานภาพถ่ายแต่ละขั้นตอนใน Construction Log แบบเรียลไทม์" icon={Wrench} />
-            <TimelineItem week="4" role="ขั้นขยายความรู้ (Elaborate)" title="สัปดาห์ที่ 4: ทดสอบประสิทธิภาพและปรับปรุงชิ้นงาน" desc="นักเรียนทดสอบประสิทธิภาพชิ้นงาน บันทึกข้อบกพร่อง (Defect Log) วิเคราะห์สาเหตุ และจัดทำแผนปรับปรุง (Redesign Plan)" icon={CheckCircle} />
-            <TimelineItem week="5" role="ขั้นประเมินผล (Evaluate)" title="สัปดาห์ที่ 5: นำเสนอผลงานและสะท้อนคิด" desc="ระบบสร้างแฟ้มสะสมงานอัตโนมัติ (Auto-Portfolio) จากข้อมูลทั้ง 5 สัปดาห์ เพื่อนำเสนอผลงานและการสะท้อนคิด (Reflection)" icon={Presentation} isLast={true} />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-16">
+
+            {/* Left: Population & Downloads */}
+            <div className="lg:col-span-4 space-y-8">
+              <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                <h3 className="font-bold text-blue-900 mb-4 flex items-center gap-2">
+                  <Users size={20} /> กลุ่มประชากรและกลุ่มตัวอย่าง
+                </h3>
+                <p className="text-sm text-slate-700 leading-relaxed mb-4">
+                  การวิจัยครั้งนี้ดำเนินการกับนักเรียนชั้นมัธยมศึกษาปีที่ 3 โรงเรียนหอวัง ภาคเรียนที่ 2 ปีการศึกษา 2568
+                  <br /><br />
+                  <strong className="text-blue-800">กลุ่มตัวอย่าง:</strong> นักเรียนห้อง 3/9 และ 3/10 จำนวนรวม 74 คน (ได้มาจากการสุ่มแบบเจาะจง)
+                </p>
+              </div>
+
+              <div className="bg-slate-800 text-white p-6 rounded-2xl shadow-lg">
+                <h3 className="font-bold text-amber-400 mb-4 flex items-center gap-2 border-b border-slate-700 pb-3">
+                  <Download size={20} /> เอกสารประกอบการวิจัย (แผนการสอน)
+                </h3>
+                <div className="space-y-3">
+                  {[1, 2, 3, 4, 5].map(w => (
+                    <a key={w} href={`/downloads/lesson-plan-${w}.pdf`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-3 rounded-lg bg-slate-700/50 hover:bg-slate-600 transition group border border-slate-600 hover:border-amber-400/50">
+                      <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:text-amber-400 group-hover:bg-slate-900 transition">แผน {w}</span>
+                        <span className="text-sm font-medium group-hover:text-white transition">สัปดาห์ที่ {w}</span>
+                      </div>
+                      <ArrowRight size={16} className="text-slate-500 group-hover:text-amber-400 transition transform group-hover:translate-x-1" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Timeline with Images */}
+            <div className="lg:col-span-8 pl-4 lg:pl-8 border-l-2 border-slate-100">
+              <div className="space-y-12">
+                {[
+                  { w: 1, title: 'การระบุและวิเคราะห์ปัญหา', phase: 'Engage', icon: Search, img: '/methodology/week1-problem.jpg', desc: 'นักเรียนระบุปัญหาด้วยกรอบ 5W1H และวิเคราะห์สาเหตุที่แท้จริงด้วยเทคนิค 5 Whys' },
+                  { w: 2, title: 'รวบรวมข้อมูลและออกแบบชิ้นงาน', phase: 'Explore', icon: Lightbulb, img: '/methodology/week2-design.jpg', desc: 'ออกแบบชิ้นงาน (Blueprint) และประเมินความเป็นไปได้ผ่านตาราง Decision Matrix' },
+                  { w: 3, title: 'ลงมือสร้างและบันทึกตามสภาพจริง', phase: 'Explain', icon: Wrench, img: '/methodology/week3-maker.jpg', desc: 'สร้างชิ้นงานและบันทึกภาพถ่ายแต่ละขั้นตอนใน Construction Log แบบเรียลไทม์' },
+                  { w: 4, title: 'ทดสอบประสิทธิภาพและปรับปรุง', phase: 'Elaborate', icon: CheckCircle, img: '/methodology/week4-test.jpg', desc: 'ทดสอบชิ้นงาน บันทึกข้อบกพร่อง (Defect Log) และจัดทำแผนปรับปรุง (Redesign Plan)' },
+                  { w: 5, title: 'นำเสนอผลงานและสะท้อนคิด', phase: 'Evaluate', icon: Presentation, img: '/methodology/week5-pitch.jpg', desc: 'ระบบแปลงร่องรอยเป็นแฟ้มสะสมงาน นำเสนอ (Pitching) และสะท้อนคิด (Reflection)' }
+                ].map((step, i) => (
+                  <div key={i} className="relative flex flex-col sm:flex-row gap-6 group">
+                    <div className="absolute top-8 -left-[2.15rem] lg:-left-[2.65rem] w-4 h-4 rounded-full bg-slate-200 border-4 border-white group-hover:bg-blue-500 transition-colors z-10 hidden sm:block"></div>
+
+                    <div className="w-16 h-16 shrink-0 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition duration-300">
+                      <step.icon size={28} />
+                    </div>
+
+                    <div className="flex-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:shadow-md transition duration-300 flex flex-col md:flex-row gap-6 items-start">
+                      <div className="flex-1">
+                        <span className="text-xs font-bold text-blue-500 uppercase tracking-wider mb-1 block">Week {step.w} : {step.phase}</span>
+                        <h4 className="text-lg font-bold text-slate-800 mb-2">{step.title}</h4>
+                        <p className="text-sm text-slate-600 leading-relaxed mb-4">{step.desc}</p>
+                      </div>
+
+                      <div className="w-full md:w-48 h-32 shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                        <img src={step.img} alt={`Week ${step.w}`} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-center text-slate-400 text-[10px] text-center p-2"><Camera size={20} class="mb-1 opacity-50"/>Missing: ${step.img.split('/').pop()}</div>`; }} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1352,21 +1410,93 @@ export default function ShowcaseLanding() {
         </div>
       </section>
 
-      {/* 8. Footer */}
+      {/* 8. Footer & Team */}
       <footer className="bg-slate-900 pt-16 pb-8 border-t border-slate-800">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold text-white mb-2">ผู้วิจัย: นายบุญวิชญ์ ปวโรภาส</h3>
-            <p className="text-slate-400 mb-1">รายวิชาคอมพิวเตอร์เพื่อการออกแบบ 3 โรงเรียนหอวัง</p>
-            <p className="text-slate-400">สาขาวิชาเทคโนโลยีดิจิทัลเพื่อการศึกษา คณะศึกษาศาสตร์ มหาวิทยาลัยเกษตรศาสตร์</p>
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeading
+            title={<span className="text-white">คณะผู้วิจัยและที่ปรึกษา</span>}
+            subtitle={<span className="text-slate-400">คณะทำงานผู้พัฒนาระบบและการจัดการเรียนรู้</span>}
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 mb-16">
+            {/* Researcher */}
+            <div className="flex flex-col items-center text-center">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-700 hover:border-blue-500 transition-colors mb-4 bg-slate-800">
+                <img src="/team/researcher.jpg" alt="Researcher" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500"><User size={40}/></div>'; }} />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-1">นายบุญวิชญ์ ปวโรภาส</h4>
+              <p className="text-blue-400 text-sm font-semibold mb-2">ผู้วิจัยและพัฒนานวัตกรรม</p>
+              <p className="text-slate-400 text-xs leading-relaxed max-w-[250px]">
+                นิสิตปริญญาตรี สาขาวิชาเทคโนโลยีดิจิทัลเพื่อการศึกษา คณะศึกษาศาสตร์ มหาวิทยาลัยเกษตรศาสตร์
+              </p>
+            </div>
+
+            {/* Advisor */}
+            <div className="flex flex-col items-center text-center">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-700 hover:border-emerald-500 transition-colors mb-4 bg-slate-800">
+                <img src="/team/advisor.jpg" alt="Advisor" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500"><User size={40}/></div>'; }} />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-1">ผศ.ดร. ภาคภูมิ เย็นบำรุง</h4>
+              <p className="text-emerald-400 text-sm font-semibold mb-2">อาจารย์ที่ปรึกษางานวิจัย</p>
+              <p className="text-slate-400 text-xs leading-relaxed max-w-[250px]">
+                อาจารย์ประจำภาควิชาเทคโนโลยีการศึกษา คณะศึกษาศาสตร์ มหาวิทยาลัยเกษตรศาสตร์
+              </p>
+            </div>
+
+            {/* Mentor */}
+            <div className="flex flex-col items-center text-center">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-700 hover:border-purple-500 transition-colors mb-4 bg-slate-800">
+                <img src="/team/mentor.jpg" alt="Mentor" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-500"><User size={40}/></div>'; }} />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-1">นายกิตติศัพดิ์ ซื่อตรง</h4>
+              <p className="text-purple-400 text-sm font-semibold mb-2">ครูพี่เลี้ยง (Mentor)</p>
+              <p className="text-slate-400 text-xs leading-relaxed max-w-[250px]">
+                ครูหัวหน้ากลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี โรงเรียนหอวัง
+              </p>
+            </div>
           </div>
-          <button className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg transition-colors border border-slate-700 hover:border-slate-500">
-            <Download size={18} />
-            Download Full Paper (PDF)
-          </button>
-          <div className="mt-16 pt-8 border-t border-slate-800 text-slate-500 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+
+          {/* Test Credentials & QR Code */}
+          <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 justify-center shadow-xl mb-16 relative overflow-hidden">
+            <div className="absolute -left-16 -bottom-16 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl"></div>
+
+            <div className="w-48 h-48 bg-white p-2 text-center rounded-2xl shrink-0 shadow-lg rotate-[-2deg] hover:rotate-0 transition-transform flex flex-col items-center justify-between border-4 border-slate-700">
+              <img src="/qrcode.png" alt="System QR Code" className="w-full h-full object-contain" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.innerHTML = '<div class="w-full flex-1 flex flex-col items-center justify-center text-slate-300 bg-slate-50 rounded"><Activity size={32} class="mb-2"/>ไม่พบ QR Code<br/>(/qrcode.png)</div>'; }} />
+              <span className="text-slate-900 font-bold text-xs mt-1 block w-full bg-slate-100 py-1 rounded">สแกนเพื่อทดลองใช้</span>
+            </div>
+
+            <div className="text-center md:text-left relative z-10">
+              <h3 className="text-2xl font-black text-white mb-2 flex items-center justify-center md:justify-start gap-2"><Lightbulb className="text-amber-400" /> ทดลองใช้งานระบบ ( สำหรับคณะกรรมการ )</h3>
+              <p className="text-slate-400 text-sm mb-6 max-w-md">เชิญทดลองเข้าสู่ระบบในฐานะ "ครูผู้สอน" เพื่อดูหน้าจอ Teacher Dashboard และทดลองตรวจประเมินผลงานผ่าน Interactive Matrix</p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="bg-slate-900 border border-slate-700 p-3 rounded-xl flex-1 items-center justify-between flex">
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Username (Email)</span>
+                    <span className="text-blue-400 font-mono text-sm leading-none">test@gmail.com</span>
+                  </div>
+                  <button className="text-slate-500 hover:text-white transition"><Copy size={16} /></button>
+                </div>
+                <div className="bg-slate-900 border border-slate-700 p-3 rounded-xl flex-1 items-center justify-between flex">
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Password</span>
+                    <span className="text-white font-mono text-sm leading-none">123456</span>
+                  </div>
+                  <button className="text-slate-500 hover:text-white transition"><Copy size={16} /></button>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-center md:justify-start">
+                <a href="https://scaffolded-logbook-research.web.app/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-200 text-slate-900 font-bold rounded-full transition-colors shadow-lg">
+                  เข้าสู่ระบบ <ArrowRight size={18} />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 border-t border-slate-800 text-slate-500 text-sm flex flex-col md:flex-row justify-between items-center gap-4 text-center">
             <p>© 2026 EDP Smart Logbook Research Project. All rights reserved.</p>
-            <p>Designed for Educational Purposes</p>
+            <p className="flex items-center gap-2"><Activity size={14} className="text-blue-500" /> Designed for Educational Action Research (KU)</p>
           </div>
         </div>
       </footer>
