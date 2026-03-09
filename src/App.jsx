@@ -4,7 +4,8 @@ import {
   Activity, Copy, FileWarning, ShieldCheck, Scale, Camera, PieChart,
   ArrowRight, Download, Lightbulb, Search, Wrench, CheckCircle, Presentation,
   User, Users, Star, Target, PenTool, Hammer, TrendingUp, X, Image as ImageIcon, Loader,
-  MapPin, Layers, CheckSquare, Zap, AlertCircle, Link, PlayCircle, BarChart, BookOpen, Monitor
+  MapPin, Layers, CheckSquare, Zap, AlertCircle, Link, PlayCircle, BarChart, BookOpen, Monitor,
+  Sparkles, Terminal, Database, GraduationCap
 } from 'lucide-react';
 
 // --- Firebase Initialization ---
@@ -1037,56 +1038,160 @@ export default function ShowcaseLanding() {
         </div>
       </section>
 
-      {/* 3.1. Research Questions & Hypotheses */}
-      <section className="py-24 bg-slate-50 relative border-t border-slate-200">
+      {/* Block A: Interactive Research Framework (วัตถุประสงค์ สมมติฐาน และขอบเขตการวิจัย) */}
+      <section id="framework" className="py-24 bg-slate-50 relative border-t border-slate-200">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-[80px] opacity-60"></div>
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <SectionHeading
-            title="คำถามและสมมติฐานการวิจัย"
-            subtitle=""
+            title="กรอบการดำเนินการวิจัย"
+            subtitle="คลิกที่การ์ดเพื่ออ่านรายละเอียดกรอบแนวคิดที่ใช้ในการวิจัยครั้งนี้"
           />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {/* Objectives */}
+            <motion.div
+              layout
+              onClick={() => setActiveFrameworkCard(activeFrameworkCard === 'objectives' ? null : 'objectives')}
+              className={`bg-white rounded-2xl p-8 shadow-sm border-t-4 cursor-pointer transition-all duration-300 hover:shadow-md ${activeFrameworkCard === 'objectives' ? 'border-t-blue-600 border-x border-b border-blue-200 ring-4 ring-blue-50' : 'border-t-blue-500 border-slate-100 hover:border-blue-200'} group`}
+            >
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300 ${activeFrameworkCard === 'objectives' ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600 group-hover:bg-blue-100'}`}>
+                <Target size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-blue-900 mb-4">วัตถุประสงค์การวิจัย</h3>
+
+              <AnimatePresence mode="wait">
+                {activeFrameworkCard === 'objectives' ? (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="text-slate-700 text-sm leading-relaxed space-y-2 mt-4"
+                  >
+                    <p>1. เพื่อพัฒนาระบบ EDP Smart Logbook</p>
+                    <p>2. เพื่อศึกษาความพึงพอใจของนักเรียนที่มีต่อระบบ</p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-slate-500 text-sm"
+                  >
+                    คลิกเพื่อดูเป้าหมายหลักของการพัฒนาระบบ EDP Smart Logbook
+                    <span className="block mt-4 text-blue-600 font-semibold flex items-center group-hover:translate-x-1 transition-transform">อ่านรายละเอียด <ArrowRight size={16} className="ml-1" /></span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Hypotheses */}
+            <motion.div
+              layout
+              onClick={() => setActiveFrameworkCard(activeFrameworkCard === 'hypotheses' ? null : 'hypotheses')}
+              className={`bg-white rounded-2xl p-8 shadow-sm border-t-4 cursor-pointer transition-all duration-300 hover:shadow-md ${activeFrameworkCard === 'hypotheses' ? 'border-t-emerald-600 border-x border-b border-emerald-200 ring-4 ring-emerald-50' : 'border-t-emerald-500 border-slate-100 hover:border-emerald-200'} group`}
+            >
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300 ${activeFrameworkCard === 'hypotheses' ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100'}`}>
+                <CheckCircle size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-emerald-900 mb-4">สมมติฐานการวิจัย</h3>
+
+              <AnimatePresence mode="wait">
+                {activeFrameworkCard === 'hypotheses' ? (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="text-slate-700 text-sm leading-relaxed space-y-2 mt-4"
+                  >
+                    <p>1. ทักษะกระบวนการออกแบบเชิงวิศวกรรม (EDP) ผ่านเกณฑ์ร้อยละ 70</p>
+                    <p>2. ความพึงพอใจของนักเรียนอยู่ในระดับมากที่สุด</p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-slate-500 text-sm"
+                  >
+                    คลิกเพื่อดูผลลัพธ์ที่คาดหวังด้านทักษะและความพึงพอใจ
+                    <span className="block mt-4 text-emerald-600 font-semibold flex items-center group-hover:translate-x-1 transition-transform">อ่านรายละเอียด <ArrowRight size={16} className="ml-1" /></span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Scope */}
+            <motion.div
+              layout
+              onClick={() => setActiveFrameworkCard(activeFrameworkCard === 'scope' ? null : 'scope')}
+              className={`bg-white rounded-2xl p-8 shadow-sm border-t-4 cursor-pointer transition-all duration-300 hover:shadow-md ${activeFrameworkCard === 'scope' ? 'border-t-purple-600 border-x border-b border-purple-200 ring-4 ring-purple-50' : 'border-t-purple-500 border-slate-100 hover:border-purple-200'} group`}
+            >
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300 ${activeFrameworkCard === 'scope' ? 'bg-purple-600 text-white' : 'bg-purple-50 text-purple-600 group-hover:bg-purple-100'}`}>
+                <Users size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-purple-900 mb-4">ขอบเขตการวิจัย</h3>
+
+              <AnimatePresence mode="wait">
+                {activeFrameworkCard === 'scope' ? (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="text-slate-700 text-sm leading-relaxed space-y-2 mt-4"
+                  >
+                    <p><strong>ประชากร:</strong> นักเรียน ม.3/9 และ ม.3/10 จำนวน 74 คน</p>
+                    <p><strong>ระยะเวลา:</strong> 5 สัปดาห์ (10 คาบ)</p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-slate-500 text-sm"
+                  >
+                    คลิกเพื่อดูกลุ่มตัวอย่างและตัวแปรที่ใช้ในการทดลอง
+                    <span className="block mt-4 text-purple-600 font-semibold flex items-center group-hover:translate-x-1 transition-transform">อ่านรายละเอียด <ArrowRight size={16} className="ml-1" /></span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
+
+          {/* Block B: Research Questions & Hypotheses (The New 2-Item Version) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 pt-12 border-t border-slate-200 border-dashed">
             {/* Left: คำถามวิจัย */}
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
-              <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-2 border-b border-blue-100 pb-3">
-                <Search className="text-blue-500" size={24} /> คำถามวิจัย
+            <div className="bg-white p-8 rounded-3xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100 hover:border-blue-200 transition-colors duration-300 flex flex-col h-full relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110 ease-out z-0"></div>
+              <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-blue-100 rounded-lg text-blue-600"><Search size={24} /></div>
+                คำถามการวิจัย (Research Questions)
               </h3>
-              <ul className="space-y-4 text-slate-700 leading-relaxed text-sm flex-1">
-                <li className="flex gap-3 items-start">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
-                  <p>1) การจัดการเรียนรู้วิชาคอมพิวเตอร์เพื่อการออกแบบ3 โดยใช้การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E)ร่วมกับระบบบันทึกนำทาง(Scaffolded Logbook) มีประสิทธิภาพและสามารถแก้ปัญหาการทำงานของนักเรียนได้หรือไม่อย่างไร</p>
+              <ul className="space-y-5 text-slate-700 leading-relaxed text-sm md:text-base flex-1 relative z-10">
+                <li className="flex gap-4 items-start bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 shrink-0 flex items-center justify-center font-bold text-sm">1</div>
+                  <p>ทักษะกระบวนการออกแบบเชิงวิศวกรรม (EDP) ของนักเรียนที่ได้รับการจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E) ร่วมกับระบบ EDP Smart Logbook ผ่านเกณฑ์ร้อยละ 70 หรือไม่?</p>
                 </li>
-                <li className="flex gap-3 items-start">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
-                  <p>2) ผลสัมฤทธิ์ด้านทักษะกระบวนการออกแบบเชิงวิศวกรรม(EDP) ของนักเรียนหลังได้รับการจัดการเรียนรู้ สูงกว่าก่อนเรียนหรือไม่</p>
-                </li>
-                <li className="flex gap-3 items-start">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
-                  <p>3) พฤติกรรมการทำงานอย่างเป็นระบบ(การส่งงานตามขั้นตอนและการไม่ลอกเลียนแบบผลงาน) ของนักเรียน จากการใช้ระบบบันทึกนำทาง(Scaffolded Logbook) มีลักษณะเป็นอย่างไร</p>
-                </li>
-                <li className="flex gap-3 items-start">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
-                  <p>4) นักเรียนมีความพึงพอใจต่อการจัดการเรียนรู้โดยใช้การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E) ร่วมกับระบบบันทึกนำทาง(Scaffolded Logbook) อยู่ในระดับใด</p>
+                <li className="flex gap-4 items-start bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 shrink-0 flex items-center justify-center font-bold text-sm">2</div>
+                  <p>ความพึงพอใจของนักเรียนที่มีต่อการใช้ระบบบันทึกนำทาง (EDP Smart Logbook) ในการสร้างสรรค์นวัตกรรม อยู่ในระดับใด?</p>
                 </li>
               </ul>
             </div>
 
             {/* Right: สมมติฐานการวิจัย */}
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-8 rounded-3xl shadow-sm border border-emerald-100 flex flex-col h-full">
-              <h3 className="text-xl font-bold text-emerald-900 mb-6 flex items-center gap-2 border-b border-emerald-200/50 pb-3">
-                <CheckCircle className="text-emerald-500" size={24} /> สมมติฐานการวิจัย
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-8 rounded-3xl shadow-[0_2px_15px_-3px_rgba(16,185,129,0.1),0_10px_20px_-2px_rgba(16,185,129,0.06)] border border-emerald-100/50 hover:border-emerald-200 transition-colors duration-300 flex flex-col h-full relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110 ease-out z-0"></div>
+              <h3 className="text-xl font-bold text-emerald-900 mb-6 flex items-center gap-3 relative z-10">
+                <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600"><CheckCircle size={24} /></div>
+                สมมติฐานการวิจัย (Research Hypotheses)
               </h3>
-              <ul className="space-y-4 text-emerald-900 leading-relaxed text-sm flex-1">
-                <li className="flex gap-3 items-start">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 mt-2"></div>
-                  <p>1) ทักษะกระบวนการออกแบบเชิงวิศวกรรม (EDP) ของนักเรียนชั้นมัธยมศึกษาปีที่ 3 หลังได้รับการจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E)ร่วมกับระบบบันทึกนำทาง สูงกว่าก่อนเรียน</p>
+              <ul className="space-y-5 text-emerald-950 leading-relaxed text-sm md:text-base flex-1 relative z-10">
+                <li className="flex gap-4 items-start bg-white/60 backdrop-blur-sm p-4 rounded-xl border border-emerald-100/50 shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 shrink-0 flex items-center justify-center font-bold text-sm">1</div>
+                  <p>นักเรียนที่ได้รับการจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E) ร่วมกับระบบ EDP Smart Logbook มีทักษะกระบวนการออกแบบเชิงวิศวกรรม (EDP) ผ่านเกณฑ์ร้อยละ 70</p>
                 </li>
-                <li className="flex gap-3 items-start">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 mt-2"></div>
-                  <p>2) นักเรียนมีพฤติกรรมการทำงานอย่างเป็นระบบสามารถดำเนินการแก้ปัญหาตามขั้นตอนโดยไม่ลอกเลียนแบบผลงาน อยู่ในเกณฑ์ที่ผ่านการประเมิน</p>
-                </li>
-                <li className="flex gap-3 items-start">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 mt-2"></div>
-                  <p>3) นักเรียนมีความพึงพอใจต่อการจัดการเรียนรู้แบบสืบเสาะหาความรู้(5E) ร่วมกับระบบบันทึกนำทาง(Scaffolded Logbook) อยู่ในระดับมาก</p>
+                <li className="flex gap-4 items-start bg-white/60 backdrop-blur-sm p-4 rounded-xl border border-emerald-100/50 shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 shrink-0 flex items-center justify-center font-bold text-sm">2</div>
+                  <p>นักเรียนมีความพึงพอใจต่อการใช้ระบบบันทึกนำทาง (EDP Smart Logbook) ในการสร้างสรรค์นวัตกรรม อยู่ในระดับมากที่สุด</p>
                 </li>
               </ul>
             </div>
@@ -1094,91 +1199,33 @@ export default function ShowcaseLanding() {
         </div>
       </section>
 
-      {/* 3.2 Expected Benefits */}
-      <section className="py-24 bg-white relative">
+      {/* Block C: Expected Benefits */}
+      <section className="py-20 bg-white relative">
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <SectionHeading
             title="ประโยชน์ที่คาดว่าจะได้รับ"
             subtitle=""
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 border-t-4 border-t-amber-500 flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-4 text-amber-500">
-                <Lightbulb size={28} />
+            <motion.div whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }} className="bg-blue-50/50 rounded-3xl p-8 shadow-sm border border-blue-100 transition-all duration-300 flex flex-col items-center text-center group">
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 text-amber-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                <Lightbulb size={36} />
               </div>
-              <p className="text-slate-700 leading-relaxed text-sm">1) ได้แนวทางการจัดการเรียนรู้และนวัตกรรม (EDP Smart Log) ที่สามารถแก้ปัญหาผู้เรียนทำงานไม่สำเร็จและลดพฤติกรรมการลอกเลียนแบบผลงาน</p>
-            </motion.div>
-            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 border-t-4 border-t-blue-500 flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 text-blue-500">
-                <TrendingUp size={28} />
-              </div>
-              <p className="text-slate-700 leading-relaxed text-sm">2) นักเรียนได้รับการพัฒนาทักษะกระบวนการออกแบบเชิงวิศวกรรม สามารถทำงานได้อย่างเป็นระบบและมีความคิดสร้างสรรค์</p>
-            </motion.div>
-            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 border-t-4 border-t-purple-500 flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mb-4 text-purple-500">
-                <Presentation size={28} />
-              </div>
-              <p className="text-slate-700 leading-relaxed text-sm">3) เป็นแนวทางสำหรับครูผู้สอนและผู้ที่เกี่ยวข้องในการนำเทคโนโลยีมาใช้เป็นเครื่องมือช่วยติดตามความก้าวหน้าของผู้เรียน (Progress Tracking) ในรายวิชาโครงงานหรือวิชาปฏิบัติอื่น ๆ</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Research Framework - Interactive Cards */}
-      <section id="framework" className="py-24 bg-slate-50 relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-[80px] opacity-60"></div>
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <SectionHeading
-            title="วัตถุประสงค์ สมมติฐาน และขอบเขตการวิจัย"
-            subtitle="คลิกที่การ์ดเพื่ออ่านรายละเอียดกรอบแนวคิดที่ใช้ในการวิจัยครั้งนี้"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Objectives */}
-            <motion.div
-              whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              onClick={() => setActiveFrameworkCard('objectives')}
-              className="bg-white rounded-2xl p-8 shadow-sm border border-blue-100 border-t-4 border-t-blue-600 cursor-pointer transition-colors duration-300 hover:border-blue-300 group"
-            >
-              <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 group-hover:bg-blue-600 group-hover:text-white">
-                <Target size={28} />
-              </div>
-              <h3 className="text-xl font-bold text-blue-900 mb-2 group-hover:text-blue-700">วัตถุประสงค์การวิจัย</h3>
-              <p className="text-gray-500 text-sm mb-6">คลิกเพื่อดูเป้าหมายหลักของการพัฒนาระบบ EDP Smart Logbook</p>
-              <div className="flex items-center text-blue-600 font-semibold text-sm">
-                อ่านรายละเอียด <ArrowRight size={16} className="ml-2 group-hover:translate-x-2 transition-transform" />
-              </div>
+              <p className="text-slate-700 leading-relaxed text-sm md:text-base font-medium">1) ได้แนวทางการจัดการเรียนรู้และนวัตกรรม (EDP Smart Log) ที่สามารถแก้ปัญหาผู้เรียนทำงานไม่สำเร็จและลดพฤติกรรมการลอกเลียนแบบผลงาน</p>
             </motion.div>
 
-            {/* Hypotheses */}
-            <motion.div
-              whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              onClick={() => setActiveFrameworkCard('hypotheses')}
-              className="bg-white rounded-2xl p-8 shadow-sm border border-emerald-100 border-t-4 border-t-emerald-500 cursor-pointer transition-colors duration-300 hover:border-emerald-300 group"
-            >
-              <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 group-hover:bg-emerald-500 group-hover:text-white">
-                <CheckCircle size={28} />
+            <motion.div whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }} className="bg-blue-50/50 rounded-3xl p-8 shadow-sm border border-blue-100 transition-all duration-300 flex flex-col items-center text-center group">
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 text-blue-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                <TrendingUp size={36} />
               </div>
-              <h3 className="text-xl font-bold text-emerald-900 mb-2 group-hover:text-emerald-700">สมมติฐานการวิจัย</h3>
-              <p className="text-gray-500 text-sm mb-6">คลิกเพื่อดูผลลัพธ์ที่คาดหวังด้านทักษะและความพึงพอใจ</p>
-              <div className="flex items-center text-emerald-600 font-semibold text-sm">
-                อ่านรายละเอียด <ArrowRight size={16} className="ml-2 group-hover:translate-x-2 transition-transform" />
-              </div>
+              <p className="text-slate-700 leading-relaxed text-sm md:text-base font-medium">2) นักเรียนได้รับการพัฒนาทักษะกระบวนการออกแบบเชิงวิศวกรรม สามารถทำงานได้อย่างเป็นระบบและมีความคิดสร้างสรรค์</p>
             </motion.div>
 
-            {/* Scope */}
-            <motion.div
-              whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              onClick={() => setActiveFrameworkCard('scope')}
-              className="bg-white rounded-2xl p-8 shadow-sm border border-purple-100 border-t-4 border-t-purple-500 cursor-pointer transition-colors duration-300 hover:border-purple-300 group"
-            >
-              <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 group-hover:bg-purple-500 group-hover:text-white">
-                <Users size={28} />
+            <motion.div whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }} className="bg-blue-50/50 rounded-3xl p-8 shadow-sm border border-blue-100 transition-all duration-300 flex flex-col items-center text-center group">
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 text-purple-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                <Presentation size={36} />
               </div>
-              <h3 className="text-xl font-bold text-purple-900 mb-2 group-hover:text-purple-700">ขอบเขตการวิจัย</h3>
-              <p className="text-gray-500 text-sm mb-6">คลิกเพื่อดูกลุ่มตัวอย่างและตัวแปรที่ใช้ในการทดลอง</p>
-              <div className="flex items-center text-purple-600 font-semibold text-sm">
-                อ่านรายละเอียด <ArrowRight size={16} className="ml-2 group-hover:translate-x-2 transition-transform" />
-              </div>
+              <p className="text-slate-700 leading-relaxed text-sm md:text-base font-medium">3) เป็นแนวทางสำหรับครูผู้สอนและผู้ที่เกี่ยวข้องในการนำเทคโนโลยีมาใช้เป็นเครื่องมือช่วยติดตามความก้าวหน้าของผู้เรียน (Progress Tracking) ในรายวิชาโครงงานหรือวิชาปฏิบัติอื่น ๆ</p>
             </motion.div>
           </div>
         </div>
@@ -1384,66 +1431,7 @@ export default function ShowcaseLanding() {
               </div>
             </div>
 
-            {/* Block 3: Missions Timeline */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-purple-100 text-purple-700 rounded-xl"><Layers size={24} /></div>
-                <h3 className="text-2xl font-bold text-slate-800">ขั้นตอนการดำเนินงานของ Scaffolding ผ่านแผนการจัดการเรียนรู้</h3>
-              </div>
-              <p className="text-slate-700 leading-relaxed text-sm md:text-base mb-10 max-w-4xl">
-                ผู้วิจัยได้นำทฤษฎี Scaffolding มาบูรณาการเข้ากับ กระบวนการออกแบบเชิงวิศวกรรม (EDP) และ การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E) โดยแฝงกระบวนการพยุงความคิดไว้ในนวัตกรรมที่เรียกว่า ระบบบันทึกนำทาง (Scaffolded Logbook) หรือ "EDP Smart Log" ซึ่งทำหน้าที่เป็น "Hard Scaffold" หรือโครงสร้างการคิด (Thinking Template), โดยมีขั้นตอนการดำเนินงานแบ่งเป็น "ภารกิจ (Missions)" ดังนี้:
-              </p>
 
-              <div className="relative border-l-2 border-slate-200 ml-6 md:ml-8 space-y-12 pb-8">
-                {/* Mission 1 */}
-                <div className="relative pl-8 md:pl-12">
-                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-blue-100 border-4 border-white flex items-center justify-center text-blue-600 font-black shadow-sm">1</div>
-                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                    <h4 className="font-bold text-lg text-blue-800 mb-3 flex items-center gap-2"><Target size={20} /> Mission 1: การพยุงความคิดในขั้นระบุปัญหา (The Problem Hunter)</h4>
-                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 1</span>
-                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
-                      โดยระบบจะทำหน้าที่จัดโครงสร้างการคิด (Structuring) ให้นักเรียนวิเคราะห์ปัญหาด้วยเทคนิค 5W1H เพื่อจำกัดกรอบของปัญหาให้ชัดเจน, จากนั้นระบบจะทำหน้าที่กระตุ้นปัญหา (Problematizing) โดยแสดงผังความคิดแบบ Interactive ที่บังคับให้นักเรียนต้องพิมพ์ตอบคำถามด้วยเทคนิค "5 Whys (ทำไม 5 ครั้ง)" ลึกลงไปทีละระดับชั้น การบังคับกระบวนการคิดเช่นนี้เป็นการพยุงความคิดเพื่อไม่ให้นักเรียนข้ามขั้นตอนหรือด่วนสรุปปัญหาที่อาการภายนอก แต่ให้เจาะลึกไปถึงสาเหตุที่แท้จริง (Root Cause)
-                    </p>
-                  </div>
-                </div>
-
-                {/* Mission 2 */}
-                <div className="relative pl-8 md:pl-12">
-                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-emerald-100 border-4 border-white flex items-center justify-center text-emerald-600 font-black shadow-sm">2</div>
-                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                    <h4 className="font-bold text-lg text-emerald-800 mb-3 flex items-center gap-2"><Lightbulb size={20} /> Mission 2: การพยุงความคิดในขั้นรวบรวมข้อมูลและออกแบบ (The Smart Designer)</h4>
-                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 2</span>
-                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
-                      ระบบจะบังคับให้นักเรียนสร้าง "คลังความรู้ (Knowledge Bank)" โดยต้องสืบค้นข้อมูลและบันทึกแหล่งที่มาเพื่อตรวจสอบความซ้ำซ้อนและป้องกันการคัดลอก (Originality Check), จากนั้นระบบจะใช้กลไก "ตารางตัดสินใจ (Decision Matrix)" บังคับให้นักเรียนนำทางเลือกในการแก้ปัญหามาให้คะแนนเปรียบเทียบในด้านความเป็นไปได้ งบประมาณ และประสิทธิภาพ พร้อมทั้งมีฟีเจอร์ The Reality Check เพื่อบังคับให้ตอบคำถามตรวจสอบความเป็นจริงเชิงลึก การดำเนินการนี้ช่วยกลั่นกรองความคิดที่เป็นนามธรรมให้เหลือเพียงวิธีการที่ทำได้จริง
-                    </p>
-                  </div>
-                </div>
-
-                {/* Mission 3 */}
-                <div className="relative pl-8 md:pl-12">
-                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-amber-100 border-4 border-white flex items-center justify-center text-amber-600 font-black shadow-sm">3</div>
-                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                    <h4 className="font-bold text-lg text-amber-800 mb-3 flex items-center gap-2"><Wrench size={20} /> Mission 3: การพยุงความคิดในขั้นดำเนินการแก้ปัญหา (The Maker)</h4>
-                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 3</span>
-                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
-                      โดยระบบออกแบบฟังก์ชัน "บันทึกการสร้าง (Construction Log)" เพื่อควบคุมลำดับการทำงาน (Workflow) ก่อนเริ่มสร้างนักเรียนต้องกดยืนยันความปลอดภัย (Safety Check) และกำหนดเป้าหมายรายวัน, ระหว่างทำงาน ระบบจะบังคับให้อัปโหลดภาพความคืบหน้าแบบ Real-time และใช้ฟีเจอร์ "รายงานปัญหา (Bug Report)" ให้นักเรียนจดบันทึกอุปสรรคพร้อมวิธีแก้ไขปัญหาเฉพาะหน้า ซึ่งเป็นการพยุงความคิดไม่ให้เด็กท้อแท้เมื่อเผชิญปัญหาหน้างาน
-                    </p>
-                  </div>
-                </div>
-
-                {/* Mission 4 */}
-                <div className="relative pl-8 md:pl-12">
-                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-rose-100 border-4 border-white flex items-center justify-center text-rose-600 font-black shadow-sm">4</div>
-                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                    <h4 className="font-bold text-lg text-rose-800 mb-3 flex items-center gap-2"><ShieldCheck size={20} /> Mission 4: การพยุงความคิดในขั้นทดสอบและประเมินผล (Testing & Debugging)</h4>
-                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 4</span>
-                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
-                      ระบบจะปรับมุมมองของนักเรียนต่อความล้มเหลว โดยบังคับให้บันทึกผลการทดสอบอย่างโปร่งใสว่าเป็น Pass หรือ Fail, หากชิ้นงานไม่ผ่าน ระบบจะทำหน้าที่ Scaffolding โดยบังคับให้ถ่ายภาพจุดบกพร่อง (Failure Point) และบังคับให้วิเคราะห์เจาะลึกสาเหตุที่แท้จริงว่าเหตุใดชิ้นงานจึงพัง เพื่อนำไปสู่การวางแผนปรับปรุงแก้ไข (Redesign หรือ Optimization) ในขั้นตอนต่อไป
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
 
           </div>
         </div>
@@ -1504,10 +1492,82 @@ export default function ShowcaseLanding() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-700"></div>
               <div className="relative z-10">
                 <h4 className="font-black text-xl tracking-tight mb-1 drop-shadow-md">ระบบ EDP Smart Logbook</h4>
-                <p className="text-xs text-amber-50 font-medium bg-black/10 inline-block px-3 py-1 rounded-full backdrop-blur-sm">นวัตกรรมตัวแปรอิสระของการวิจัย</p>
               </div>
             </motion.div>
           </motion.div>
+
+          {/* Tech Stack Showcase Section */}
+          <div className="mb-20">
+            <div className="text-center mb-10">
+              <h3 className="text-3xl font-black text-slate-800 mb-4">การพัฒนานวัตกรรม <span className="block text-xl text-slate-500 font-bold mt-2">(Innovation Development)</span></h3>
+              <p className="text-slate-600 max-w-3xl mx-auto md:text-lg">
+                นวัตกรรม EDP Smart Logbook ถูกออกแบบและพัฒนาขึ้นในรูปแบบ Web Application โดยประยุกต์ใช้เทคโนโลยีสมัยใหม่ร่วมกับศาสตร์ทางครุศาสตร์ ดังนี้:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+              {/* Left Side: Tech Stack Cards */}
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Card 1: AI & System Design */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow group">
+                  <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Sparkles size={28} />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-lg mb-2">AI-Assisted Design</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    ประยุกต์ใช้ปัญญาประดิษฐ์ Google Gemini ในการร่วมออกแบบโครงสร้างระบบ
+                  </p>
+                </div>
+
+                {/* Card 2: Development Tools */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow group">
+                  <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Terminal size={28} />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-lg mb-2">IDE & Coding</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    พัฒนาและเขียนโค้ดผ่าน Visual Studio Code, เครื่องมือ Google Antigravity และ Cursor Editor
+                  </p>
+                </div>
+
+                {/* Card 3: Database & Cloud */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow group">
+                  <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Database size={28} />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-lg mb-2">Backend & Storage</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    ใช้ระบบฐานข้อมูลและประมวลผลแบบ Real-time ด้วย Google Firebase
+                  </p>
+                </div>
+
+                {/* Card 4: Pedagogical Integration */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow group">
+                  <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <GraduationCap size={28} />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-lg mb-2">5E Models + EDP</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    บูรณาการร่วมกับแผนการจัดการเรียนรู้ 5E เรื่อง กระบวนการออกแบบเชิงวิศวกรรม
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Side: Behind the Scenes */}
+              <div className="lg:col-span-5 flex flex-col justify-center">
+                <h4 className="text-sm font-bold text-slate-500 mb-4 flex items-center gap-2"><Camera size={16} /> ภาพเบื้องหลังการพัฒนาระบบ</h4>
+                <div className="rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-900 p-1 group relative">
+                  <SmartCarousel basePath="/methodology/tech-stack" setLightboxImage={setLightboxImage} containerClassName="relative w-full aspect-[4/3] sm:aspect-video lg:aspect-[4/3] bg-slate-800 rounded-xl overflow-hidden cursor-pointer" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 text-center shadow-sm max-w-4xl mx-auto">
+              <p className="text-slate-800 leading-relaxed md:text-lg font-medium">
+                การบูรณาการเทคโนโลยีขั้นสูงเข้ากับแผนการจัดการเรียนรู้ ก่อให้เกิด <strong className="text-blue-700">'ฟังก์ชันสนับสนุนกระบวนการคิด (Cognitive Scaffolding Functions)'</strong> ที่ช่วยพยุงความคิดและจัดระเบียบการทำงานของผู้เรียนในแต่ละขั้นตอน ดังนี้:
+              </p>
+            </div>
+          </div>
 
           {/* App Features matching research variables */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
