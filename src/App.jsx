@@ -772,6 +772,33 @@ export default function ShowcaseLanding() {
   const [evaluations, setEvaluations] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [selectedTeam, setSelectedTeam] = useState(null);
+
+  // State สำหรับ Section วิเคราะห์รายกลุ่ม
+  const [activeRoom, setActiveRoom] = useState('3/9');
+  const [expandedTeam, setExpandedTeam] = useState(null);
+
+  // ข้อมูลคะแนนจริง (ฝังในระบบ)
+  const teamScores = {
+    '3/9': [
+      { name: 'SHANNY', w1: 7, w2: 10, w3: 10, w4: 10, w5: 10, total: 47 },
+      { name: 'Ameba', w1: 10, w2: 10, w3: 10, w4: 10, w5: 5, total: 45 },
+      { name: 'Pheem the Builder', w1: 10, w2: 10, w3: 10, w4: 10, w5: 5, total: 45 },
+      { name: 'ManuLnwza67', w1: 7, w2: 10, w3: 10, w4: 10, w5: 6, total: 43 },
+      { name: 'Zony', w1: 7, w2: 9, w3: 10, w4: 10, w5: 5, total: 41 },
+      { name: 'Teamบริษัทไม่จำกัดฯ', w1: 7, w2: 10, w3: 9, w4: 10, w5: 4, total: 40 },
+      { name: 'Teamนี้ไม่มีคราไชยู', w1: 7, w2: 10, w3: 9, w4: 8, w5: 4, total: 38 },
+      { name: 'DC Operation', w1: 7, w2: 7, w3: 10, w4: 7, w5: 6, total: 37 }
+    ],
+    '3/10': [
+      { name: 'Zootopia', w1: 5, w2: 10, w3: 10, w4: 10, w5: 5, total: 40 },
+      { name: 'ABC', w1: 7, w2: 9, w3: 10, w4: 10, w5: 3, total: 39 },
+      { name: 'Team สิงโตใจงาม🦁', w1: 7, w2: 9, w3: 9, w4: 10, w5: 4, total: 39 },
+      { name: 'team rorofago', w1: 6, w2: 7, w3: 10, w4: 6, w5: 5.2, total: 34.2 },
+      { name: 'teamวิศวะตาเข', w1: 7, w2: 10, w3: 7, w4: 6, w5: 4, total: 34 },
+      { name: 'ค่าBMI', w1: 7, w2: 6, w3: 9, w4: 9, w5: 3, total: 34 },
+      { name: 'Team รา', w1: 6, w2: 9, w3: 8, w4: 8, w5: 2.75, total: 33.75 }
+    ]
+  };
   const [activeFrameworkCard, setActiveFrameworkCard] = useState(null);
   const [lightboxImage, setLightboxImage] = useState(null);
 
@@ -1010,6 +1037,93 @@ export default function ShowcaseLanding() {
         </div>
       </section>
 
+      {/* 3.1. Research Questions & Hypotheses */}
+      <section className="py-24 bg-slate-50 relative border-t border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
+          <SectionHeading
+            title="คำถามและสมมติฐานการวิจัย"
+            subtitle=""
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left: คำถามวิจัย */}
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col h-full">
+              <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-2 border-b border-blue-100 pb-3">
+                <Search className="text-blue-500" size={24} /> คำถามวิจัย
+              </h3>
+              <ul className="space-y-4 text-slate-700 leading-relaxed text-sm flex-1">
+                <li className="flex gap-3 items-start">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
+                  <p>1) การจัดการเรียนรู้วิชาคอมพิวเตอร์เพื่อการออกแบบ3 โดยใช้การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E)ร่วมกับระบบบันทึกนำทาง(Scaffolded Logbook) มีประสิทธิภาพและสามารถแก้ปัญหาการทำงานของนักเรียนได้หรือไม่อย่างไร</p>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
+                  <p>2) ผลสัมฤทธิ์ด้านทักษะกระบวนการออกแบบเชิงวิศวกรรม(EDP) ของนักเรียนหลังได้รับการจัดการเรียนรู้ สูงกว่าก่อนเรียนหรือไม่</p>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
+                  <p>3) พฤติกรรมการทำงานอย่างเป็นระบบ(การส่งงานตามขั้นตอนและการไม่ลอกเลียนแบบผลงาน) ของนักเรียน จากการใช้ระบบบันทึกนำทาง(Scaffolded Logbook) มีลักษณะเป็นอย่างไร</p>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-2"></div>
+                  <p>4) นักเรียนมีความพึงพอใจต่อการจัดการเรียนรู้โดยใช้การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E) ร่วมกับระบบบันทึกนำทาง(Scaffolded Logbook) อยู่ในระดับใด</p>
+                </li>
+              </ul>
+            </div>
+
+            {/* Right: สมมติฐานการวิจัย */}
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-8 rounded-3xl shadow-sm border border-emerald-100 flex flex-col h-full">
+              <h3 className="text-xl font-bold text-emerald-900 mb-6 flex items-center gap-2 border-b border-emerald-200/50 pb-3">
+                <CheckCircle className="text-emerald-500" size={24} /> สมมติฐานการวิจัย
+              </h3>
+              <ul className="space-y-4 text-emerald-900 leading-relaxed text-sm flex-1">
+                <li className="flex gap-3 items-start">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 mt-2"></div>
+                  <p>1) ทักษะกระบวนการออกแบบเชิงวิศวกรรม (EDP) ของนักเรียนชั้นมัธยมศึกษาปีที่ 3 หลังได้รับการจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E)ร่วมกับระบบบันทึกนำทาง สูงกว่าก่อนเรียน</p>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 mt-2"></div>
+                  <p>2) นักเรียนมีพฤติกรรมการทำงานอย่างเป็นระบบสามารถดำเนินการแก้ปัญหาตามขั้นตอนโดยไม่ลอกเลียนแบบผลงาน อยู่ในเกณฑ์ที่ผ่านการประเมิน</p>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 mt-2"></div>
+                  <p>3) นักเรียนมีความพึงพอใจต่อการจัดการเรียนรู้แบบสืบเสาะหาความรู้(5E) ร่วมกับระบบบันทึกนำทาง(Scaffolded Logbook) อยู่ในระดับมาก</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3.2 Expected Benefits */}
+      <section className="py-24 bg-white relative">
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
+          <SectionHeading
+            title="ประโยชน์ที่คาดว่าจะได้รับ"
+            subtitle=""
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 border-t-4 border-t-amber-500 flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-4 text-amber-500">
+                <Lightbulb size={28} />
+              </div>
+              <p className="text-slate-700 leading-relaxed text-sm">1) ได้แนวทางการจัดการเรียนรู้และนวัตกรรม (EDP Smart Log) ที่สามารถแก้ปัญหาผู้เรียนทำงานไม่สำเร็จและลดพฤติกรรมการลอกเลียนแบบผลงาน</p>
+            </motion.div>
+            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 border-t-4 border-t-blue-500 flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 text-blue-500">
+                <TrendingUp size={28} />
+              </div>
+              <p className="text-slate-700 leading-relaxed text-sm">2) นักเรียนได้รับการพัฒนาทักษะกระบวนการออกแบบเชิงวิศวกรรม สามารถทำงานได้อย่างเป็นระบบและมีความคิดสร้างสรรค์</p>
+            </motion.div>
+            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl p-6 shadow-md border border-slate-100 border-t-4 border-t-purple-500 flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mb-4 text-purple-500">
+                <Presentation size={28} />
+              </div>
+              <p className="text-slate-700 leading-relaxed text-sm">3) เป็นแนวทางสำหรับครูผู้สอนและผู้ที่เกี่ยวข้องในการนำเทคโนโลยีมาใช้เป็นเครื่องมือช่วยติดตามความก้าวหน้าของผู้เรียน (Progress Tracking) ในรายวิชาโครงงานหรือวิชาปฏิบัติอื่น ๆ</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* 4. Research Framework - Interactive Cards */}
       <section id="framework" className="py-24 bg-slate-50 relative">
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-[80px] opacity-60"></div>
@@ -1170,6 +1284,36 @@ export default function ShowcaseLanding() {
         )}
       </AnimatePresence>
 
+      {/* 4.5 Literature Review */}
+      <section className="py-24 bg-white relative border-t border-slate-200">
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
+          <SectionHeading
+            title="เอกสารและงานวิจัยที่เกี่ยวข้อง"
+            subtitle="อ้างอิงบุคคลที่น่าเชื่อถือ หรือเจ้าของทฤษฏีต่างๆ"
+          />
+          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-200/50 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+            <ul className="space-y-4 relative z-10">
+              {[
+                "1.หลักสูตรแกนกลางและสาระการเรียนรู้เทคโนโลยีการออกแบบและเทคโนโลยี",
+                "2. การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E)",
+                "3. กระบวนการออกแบบเชิงวิศวกรรม (EDP)",
+                "4. ทฤษฎีฐานการช่วยเหลือ (Scaffolding Theory) และระบบบันทึกนำทาง (Scaffolded Logbook)",
+                "5. งานวิจัยที่เกี่ยวข้อง",
+                "6.กรอบแนวคิดการวิจัย"
+              ].map((text, i) => (
+                <li key={i} className="flex gap-4 items-center bg-white p-4 rounded-xl shadow-sm border border-slate-100/50 hover:border-blue-200 transition-colors">
+                  <div className="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center shrink-0">
+                    <Layers size={20} />
+                  </div>
+                  <span className="text-slate-700 font-medium md:text-base text-sm leading-relaxed">{text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* 5. Innovation Section */}
       <section id="innovation" className="py-24 bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-6xl mx-auto px-4">
@@ -1298,10 +1442,27 @@ export default function ShowcaseLanding() {
                   <Users size={20} /> กลุ่มประชากรและกลุ่มตัวอย่าง
                 </h3>
                 <p className="text-sm text-slate-700 leading-relaxed mb-4">
-                  การวิจัยครั้งนี้ดำเนินการกับนักเรียนชั้นมัธยมศึกษาปีที่ 3 โรงเรียนหอวัง ภาคเรียนที่ 2 ปีการศึกษา 2568
-                  <br /><br />
-                  <strong className="text-blue-800">กลุ่มตัวอย่าง:</strong> นักเรียนห้อง 3/9 และ 3/10 จำนวนรวม 74 คน (ได้มาจากการสุ่มแบบเจาะจง)
+                  ระยะเวลา จำนวน 5 สัปดาห์ (สัปดาห์ละ2 คาบ รวมเวลาเรียนทั้งหมด 10 คาบ)ตั้งแต่เดือน มกราคม พ.ศ. 2568 ถึงเดือน กุมภาพันธ์ พ.ศ. 2569 ม.3/9 นักเรียน 40 คน ม.3/10 นักเรียน 34 คน
                 </p>
+              </div>
+
+              <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 mt-6">
+                <h3 className="font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                  <Wrench size={20} /> เครื่องมือที่ใช้
+                </h3>
+                <p className="text-sm text-slate-700 leading-relaxed max-w-none">
+                  เครื่องมือคือ แผนการจัดการเรียนรู้ Models 5E + เรื่องกระบวนการออกแบบเชิงวิศวกรรม + นวัตกรรม EDP Smart Logbook
+                </p>
+              </div>
+
+              <div className="bg-purple-50 p-6 rounded-2xl border border-purple-100 mt-6">
+                <h3 className="font-bold text-purple-900 mb-4 flex items-center gap-2">
+                  <Layers size={20} /> ขั้นตอนพัฒนานวัตกรรม
+                </h3>
+                <p className="text-sm text-slate-700 leading-relaxed mb-4">
+                  ขั้นตอนพัฒนานวัตกรรม EDP Smart Log ใช้พัฒนาโค้ดที่ google Antigravity / Cursor และระบบฐานข้อมูลของ Google firebase และมีรูปแสดง
+                </p>
+                <img src="/methodology/tech-stack.jpg" alt="Innovation Development" className="rounded-xl shadow-lg mt-4 w-full" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML += '<div class="text-center p-6 mt-4 text-purple-400 bg-white rounded-xl shadow-sm"><Activity size="32" class="mx-auto mb-2 opacity-50"/><p class="text-xs font-bold">Tech Stack Visual Placeholder</p></div>' }} />
               </div>
 
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-6">
@@ -1361,6 +1522,112 @@ export default function ShowcaseLanding() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* --- SECTION: วิเคราะห์ผลสัมฤทธิ์รายกลุ่มแบบเจาะลึก --- */}
+      <section className="py-20 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-5xl mx-auto px-4">
+          <SectionHeading
+            title="การประเมินทักษะ EDP เชิงลึกรายกลุ่ม"
+            subtitle="คลิกที่ชื่อกลุ่มเพื่อดูรายละเอียดคะแนนและพัฒนาการในแต่ละสัปดาห์ (ข้อมูลจริง 15 กลุ่ม)"
+          />
+
+          {/* ปุ่มสลับห้องเรียน */}
+          <div className="flex justify-center mb-10">
+            <div className="bg-white p-1 rounded-xl shadow-sm border border-slate-200 inline-flex">
+              <button
+                onClick={() => { setActiveRoom('3/9'); setExpandedTeam(null); }}
+                className={`px-8 py-3 rounded-lg font-bold transition-all ${activeRoom === '3/9' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+              >
+                นักเรียนชั้น ม.3/9
+              </button>
+              <button
+                onClick={() => { setActiveRoom('3/10'); setExpandedTeam(null); }}
+                className={`px-8 py-3 rounded-lg font-bold transition-all ${activeRoom === '3/10' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+              >
+                นักเรียนชั้น ม.3/10
+              </button>
+            </div>
+          </div>
+
+          {/* แสดงรายชื่อกลุ่ม */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {teamScores[activeRoom].map((team, idx) => {
+              const isExpanded = expandedTeam === team.name;
+              const percentage = (team.total / 50) * 100;
+              const strokeDasharray = `${percentage} 100`;
+
+              return (
+                <div key={idx} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                  {/* กล่องหัวข้อ (กดเพื่อกางออก) */}
+                  <div
+                    onClick={() => setExpandedTeam(isExpanded ? null : team.name)}
+                    className="p-5 cursor-pointer flex items-center justify-between bg-white hover:bg-blue-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* กราฟวงกลมจิ๋ว (Donut Chart) */}
+                      <div className="relative w-14 h-14 flex items-center justify-center">
+                        <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
+                          <path className="text-slate-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
+                          <path className={`${percentage >= 80 ? 'text-emerald-500' : percentage >= 70 ? 'text-blue-500' : 'text-amber-500'}`} strokeDasharray={strokeDasharray} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
+                        </svg>
+                        <span className="absolute text-xs font-bold text-slate-700">{Math.round(percentage)}%</span>
+                      </div>
+
+                      <div>
+                        <h4 className="font-bold text-slate-800 text-lg">{team.name}</h4>
+                        <p className="text-sm text-slate-500">คะแนนรวม: <span className="font-bold text-blue-600">{team.total}</span> / 50</p>
+                      </div>
+                    </div>
+                    <div className="text-slate-400">
+                      {isExpanded ? <X size={20} /> : <ArrowRight size={20} />}
+                    </div>
+                  </div>
+
+                  {/* รายละเอียดแต่ละ Week (แสดงเมื่อถูกกด) */}
+                  {isExpanded && (
+                    <div className="p-5 bg-slate-50 border-t border-slate-100 text-sm">
+                      <p className="font-bold text-slate-700 mb-4 flex items-center gap-2">
+                        <Activity size={16} className="text-blue-500" /> ความละเอียดของชิ้นงานรายสัปดาห์
+                      </p>
+                      <div className="space-y-3">
+                        {[
+                          { label: 'W1: ระบุปัญหา', score: team.w1 },
+                          { label: 'W2: ออกแบบ', score: team.w2 },
+                          { label: 'W3: สร้างชิ้นงาน', score: team.w3 },
+                          { label: 'W4: ทดสอบ', score: team.w4 },
+                          { label: 'W5: นำเสนอ', score: team.w5 }
+                        ].map((w, i) => (
+                          <div key={i} className="flex items-center gap-3">
+                            <span className="w-24 text-slate-600">{w.label}</span>
+                            <div className="flex-1 bg-slate-200 rounded-full h-2">
+                              <div className={`h-2 rounded-full ${w.score === 10 ? 'bg-emerald-500' : w.score >= 7 ? 'bg-blue-400' : 'bg-amber-400'}`} style={{ width: `${w.score * 10}%` }}></div>
+                            </div>
+                            <span className="w-8 text-right font-medium text-slate-700">{w.score}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* สรุป Insight ด้านล่าง */}
+          <div className="mt-12 bg-indigo-50 p-6 rounded-2xl border border-indigo-100 flex gap-4 items-start shadow-sm">
+            <div className="bg-indigo-100 p-3 rounded-full text-indigo-600 flex-shrink-0">
+              <Lightbulb size={24} />
+            </div>
+            <div>
+              <h4 className="font-bold text-indigo-900 mb-2">ข้อค้นพบจากการวิเคราะห์รายกลุ่ม (Group Insight)</h4>
+              <p className="text-sm text-indigo-800 leading-relaxed">
+                กลุ่มที่มีคะแนนนำเสนอ (W5) สูง เช่น <strong className="font-black">SHANNY</strong> และ <strong className="font-black">Zootopia</strong> สามารถทำคะแนนรวมทะลุ 40/50 ชี้ให้เห็นว่าระบบช่วยปรับพฤติกรรมให้เด็กมีความละเอียดรอบคอบตั้งแต่กระบวนการออกแบบ (W2) และลงมือสร้าง (W3) ซึ่งส่งผลให้การรวบรวมข้อมูลลง Auto-Portfolio ทำได้สมบูรณ์ ในขณะที่บางกลุ่มที่สอบตกในสัปดาห์ที่ 5 สะท้อนถึงการบริหารเวลาที่บกพร่องในช่วงปลายโปรเจกต์
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 
