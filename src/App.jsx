@@ -1539,6 +1539,126 @@ export default function ShowcaseLanding() {
         </div>
       </section>
 
+      {/* 8. Student Voice & Satisfaction */}
+      <section className="py-24 bg-slate-50 relative overflow-hidden border-t border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
+          <SectionHeading
+            title={<span className="text-slate-900">เสียงสะท้อนจากผู้เรียน (Student Voice)</span>}
+            subtitle={<span className="text-slate-500">ความคิดเห็นและระดับความพึงพอใจของนักเรียนกลุ่มตัวอย่าง 58 คน ที่มีต่อระบบ EDP Smart Logbook</span>}
+          />
+
+          <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left Column: Hero Score & Analysis Panel */}
+            <div className="lg:col-span-4 space-y-6">
+
+              {/* Satisfaction Hero Block */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xl text-center relative overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-amber-400 to-orange-500"></div>
+                <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Average Satisfaction</h3>
+                <div className="flex justify-center items-center gap-2 mb-2">
+                  <div className="text-7xl font-black text-slate-800 tracking-tighter">4.65</div>
+                  <div className="text-slate-400 font-bold self-end pb-2">/ 5.00</div>
+                </div>
+                <div className="flex justify-center gap-1 text-amber-500 mb-4">
+                  <Star size={24} fill="currentColor" />
+                  <Star size={24} fill="currentColor" />
+                  <Star size={24} fill="currentColor" />
+                  <Star size={24} fill="currentColor" />
+                  <div className="relative">
+                    <Star size={24} className="text-slate-200" fill="currentColor" />
+                    <Star size={24} className="absolute top-0 left-0 overflow-hidden text-amber-500" fill="currentColor" style={{ clipPath: 'inset(0 35% 0 0)' }} />
+                  </div>
+                </div>
+                <div className="inline-block px-4 py-1.5 bg-emerald-50 text-emerald-600 font-bold rounded-full text-sm border border-emerald-100">
+                  ระดับคุณภาพ: มากที่สุด
+                </div>
+              </motion.div>
+
+              {/* Academic Content Analysis */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="bg-blue-900 p-8 rounded-3xl shadow-lg text-white"
+              >
+                <h3 className="text-lg font-bold text-amber-400 mb-6 border-b border-blue-800 pb-4 flex items-center gap-2">
+                  <TrendingUp size={20} /> สรุปประเด็นความประทับใจหลัก
+                </h3>
+                <ul className="space-y-5">
+                  <li className="flex gap-4 items-start">
+                    <div className="w-8 h-8 rounded-full bg-blue-800/50 flex-shrink-0 flex items-center justify-center text-blue-300 font-bold text-sm">1</div>
+                    <div>
+                      <h4 className="font-bold text-blue-100 text-sm mb-1">Cognitive Scaffolding</h4>
+                      <p className="text-xs text-blue-200/80 leading-relaxed">ช่วยจัดระเบียบความคิดและกระบวนการทำงานให้เป็นขั้นเป็นตอน</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-4 items-start">
+                    <div className="w-8 h-8 rounded-full bg-blue-800/50 flex-shrink-0 flex items-center justify-center text-blue-300 font-bold text-sm">2</div>
+                    <div>
+                      <h4 className="font-bold text-blue-100 text-sm mb-1">Efficiency</h4>
+                      <p className="text-xs text-blue-200/80 leading-relaxed">ลดภาระการเขียนและจัดการเอกสาร (Paperless)</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-4 items-start">
+                    <div className="w-8 h-8 rounded-full bg-blue-800/50 flex-shrink-0 flex items-center justify-center text-blue-300 font-bold text-sm">3</div>
+                    <div>
+                      <h4 className="font-bold text-blue-100 text-sm mb-1">UX/UI</h4>
+                      <p className="text-xs text-blue-200/80 leading-relaxed">อินเทอร์เฟซทันสมัย ใช้งานง่าย และเข้าถึงได้ทุกที่ทุกเวลา</p>
+                    </div>
+                  </li>
+                </ul>
+              </motion.div>
+
+            </div>
+
+            {/* Right Column: Qualitative Feedback Wall */}
+            <div className="lg:col-span-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  { name: "ฐิตินันท์ แก้วโกย", quote: "ใช้งานง่าย เป็นระบบมากขึ้น มีระบบความคิดที่เป็นกระบวนการมากขึ้น", color: "blue" },
+                  { name: "นลิญา แก้วขาว", quote: "ตรวจสอบงานค้างได้ง่าย สะดวกในการกรอกข้อความไม่ต้องเขียนเยอะให้วุ่นวาย", color: "emerald" },
+                  { name: "ญาณกร จารุตามระ", quote: "บันทึกข้อมูลสะดวก ดูย้อนหลังได้ง่าย ช่วยให้จัดการข้อมูลเป็นระเบียบ", color: "indigo" },
+                  { name: "พิชานันท์ นิตินาวาการ", quote: "ระบบเท่ ใช้งานง่าย สะดวกต่อการเรียนมาก", color: "purple" },
+                  { name: "ศริญรัตน์ กิจเรือนทอง", quote: "หน้าเว็บสวย สนุก ช่วยให้การทำงานกลุ่มไม่น่าเบื่อ", color: "pink" },
+                  { name: "ธนวิชญ์ ไชยบำรุง", quote: "รายละเอียดชัดเจน ใช้งานง่าย ไม่สับสน", color: "amber" }
+                ].map((testimonial, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] transition-all group flex flex-col h-full"
+                  >
+                    <div className={`text-${testimonial.color}-200 mb-3`}>
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.017 21L16.417 14C16.6669 13.0645 16.7112 12.0699 16.5458 11.1158C16.3804 10.1616 16.011 9.2635 15.474 8.51475C14.9369 7.76599 14.2514 7.1942 13.486 6.85806C12.7206 6.52191 11.9038 6.43431 11.117 6.606C10.5144 6.74106 9.96253 7.03212 9.51036 7.45265C9.05819 7.87317 8.72007 8.41031 8.52599 9.01701H11.017C11.5474 9.01701 12.0561 9.22772 12.4312 9.60279C12.8063 9.97787 13.017 10.4866 13.017 11.017C13.017 11.5474 12.8063 12.0561 12.4312 12.4312C12.0561 12.8063 11.5474 13.017 11.017 13.017H6.01699C5.48656 13.017 4.97785 12.8063 4.60278 12.4312C4.2277 12.0561 4.01699 11.5474 4.01699 11.017V9.01701C4.01699 7.50974 4.54462 6.0463 5.5161 4.90806C6.48757 3.76982 7.83617 3.03606 9.2995 2.84601L9.75699 2.78401L9.36699 1.57701L8.91699 1.63701C7.03961 1.88414 5.30906 2.83696 4.07283 4.3105C2.83659 5.78404 2.18349 7.67138 2.23699 9.59301V11.017C2.23699 12.0224 2.63646 12.9867 3.34739 13.6976C4.05833 14.4085 5.02263 14.808 6.01699 14.808H9.86699L7.46699 21H14.017Z" />
+                        <path d="M22.017 21L24.417 14C24.6669 13.0645 24.7112 12.0699 24.5458 11.1158C24.3804 10.1616 24.011 9.2635 23.474 8.51475C22.9369 7.76599 22.2514 7.1942 21.486 6.85806C20.7206 6.52191 19.9038 6.43431 19.117 6.606C18.5144 6.74106 17.9625 7.03212 17.5104 7.45265C17.0582 7.87317 16.7201 8.41031 16.526 9.01701H19.017C19.5474 9.01701 20.0561 9.22772 20.4312 9.60279C20.8063 9.97787 21.017 10.4866 21.017 11.017C21.017 11.5474 20.8063 12.0561 20.4312 12.4312C20.0561 12.8063 19.5474 13.017 19.017 13.017H14.017C13.4866 13.017 12.9779 12.8063 12.6028 12.4312C12.2277 12.0561 12.017 11.5474 12.017 11.017V9.01701C12.017 7.50974 12.5446 6.0463 13.5161 4.90806C14.4876 3.76982 15.8362 3.03606 17.2995 2.84601L17.757 2.78401L17.367 1.57701L16.917 1.63701C15.0396 1.88414 13.3091 2.83696 12.0728 4.3105C10.8366 5.78404 10.1835 7.67138 10.237 9.59301V11.017C10.237 12.0224 10.6365 12.9867 11.3474 13.6976C12.0583 14.4085 13.0226 14.808 14.017 14.808H17.867L15.467 21H22.017Z" />
+                      </svg>
+                    </div>
+                    <p className="text-slate-700 leading-relaxed font-medium mb-6 flex-grow">"{testimonial.quote}"</p>
+                    <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+                      <div className={`w-8 h-8 rounded-full bg-${testimonial.color}-100 flex items-center justify-center text-${testimonial.color}-600 font-bold text-xs uppercase`}>
+                        {testimonial.name.charAt(0)}
+                      </div>
+                      <span className="text-sm font-bold text-slate-800">{testimonial.name}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
       {/* Section พิเศษ: คณะผู้จัดทำและผู้เชี่ยวชาญ (The Advisory Team) */}
       <section className="w-full py-20 bg-white border-t border-slate-200">
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
