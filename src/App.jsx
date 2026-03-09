@@ -4,7 +4,7 @@ import {
   Activity, Copy, FileWarning, ShieldCheck, Scale, Camera, PieChart,
   ArrowRight, Download, Lightbulb, Search, Wrench, CheckCircle, Presentation,
   User, Users, Star, Target, PenTool, Hammer, TrendingUp, X, Image as ImageIcon, Loader,
-  MapPin, Layers, CheckSquare, Zap, AlertCircle, Link, PlayCircle, BarChart
+  MapPin, Layers, CheckSquare, Zap, AlertCircle, Link, PlayCircle, BarChart, BookOpen, Monitor
 } from 'lucide-react';
 
 // --- Firebase Initialization ---
@@ -777,26 +777,26 @@ export default function ShowcaseLanding() {
   const [activeRoom, setActiveRoom] = useState('3/9');
   const [expandedTeam, setExpandedTeam] = useState(null);
 
-  // ข้อมูลคะแนนจริง (ฝังในระบบ)
+  // ข้อมูลคะแนนจริง (ปรับคะแนน Team รา ให้เป็น 'ควรปรับปรุง' ใน W3-W5 เนื่องจากไม่มีชิ้นงาน)
   const teamScores = {
     '3/9': [
+      { name: 'Ameba', w1: 10, w2: 10, w3: 10, w4: 10, w5: 7.5, total: 47.5 },
+      { name: 'Pheem the Builder', w1: 10, w2: 10, w3: 10, w4: 10, w5: 7.5, total: 47.5 },
       { name: 'SHANNY', w1: 7, w2: 10, w3: 10, w4: 10, w5: 10, total: 47 },
-      { name: 'Ameba', w1: 10, w2: 10, w3: 10, w4: 10, w5: 5, total: 45 },
-      { name: 'Pheem the Builder', w1: 10, w2: 10, w3: 10, w4: 10, w5: 5, total: 45 },
-      { name: 'ManuLnwza67', w1: 7, w2: 10, w3: 10, w4: 10, w5: 6, total: 43 },
-      { name: 'Zony', w1: 7, w2: 9, w3: 10, w4: 10, w5: 5, total: 41 },
-      { name: 'Teamบริษัทไม่จำกัดฯ', w1: 7, w2: 10, w3: 9, w4: 10, w5: 4, total: 40 },
-      { name: 'Teamนี้ไม่มีคราไชยู', w1: 7, w2: 10, w3: 9, w4: 8, w5: 4, total: 38 },
-      { name: 'DC Operation', w1: 7, w2: 7, w3: 10, w4: 7, w5: 6, total: 37 }
+      { name: 'ManuLnwza67', w1: 7, w2: 10, w3: 10, w4: 10, w5: 8, total: 45 },
+      { name: 'Zony', w1: 7, w2: 9, w3: 10, w4: 10, w5: 7.5, total: 43.5 },
+      { name: 'Teamบริษัทไม่จำกัดฯ', w1: 7, w2: 10, w3: 9, w4: 10, w5: 7.5, total: 43.5 },
+      { name: 'Teamนี้ไม่มีคราไชยู', w1: 7, w2: 10, w3: 9, w4: 8, w5: 7.5, total: 41.5 },
+      { name: 'DC Operation', w1: 7, w2: 7, w3: 10, w4: 7, w5: 8, total: 39 }
     ],
     '3/10': [
-      { name: 'Zootopia', w1: 5, w2: 10, w3: 10, w4: 10, w5: 5, total: 40 },
-      { name: 'ABC', w1: 7, w2: 9, w3: 10, w4: 10, w5: 3, total: 39 },
-      { name: 'Team สิงโตใจงาม🦁', w1: 7, w2: 9, w3: 9, w4: 10, w5: 4, total: 39 },
-      { name: 'team rorofago', w1: 6, w2: 7, w3: 10, w4: 6, w5: 5.2, total: 34.2 },
-      { name: 'teamวิศวะตาเข', w1: 7, w2: 10, w3: 7, w4: 6, w5: 4, total: 34 },
-      { name: 'ค่าBMI', w1: 7, w2: 6, w3: 9, w4: 9, w5: 3, total: 34 },
-      { name: 'Team รา', w1: 6, w2: 9, w3: 8, w4: 8, w5: 2.75, total: 33.75 }
+      { name: 'ABC', w1: 7, w2: 9, w3: 10, w4: 10, w5: 8, total: 44 },
+      { name: 'Zootopia', w1: 5, w2: 10, w3: 10, w4: 10, w5: 7.5, total: 42.5 },
+      { name: 'Team สิงโตใจงาม🦁', w1: 7, w2: 9, w3: 9, w4: 10, w5: 7.5, total: 42.5 },
+      { name: 'ค่าBMI', w1: 7, w2: 6, w3: 9, w4: 9, w5: 7.5, total: 38.5 },
+      { name: 'teamวิศวะตาเข', w1: 7, w2: 10, w3: 7, w4: 6, w5: 7.5, total: 37.5 },
+      { name: 'team rorofago', w1: 6, w2: 7, w3: 10, w4: 6, w5: 7.5, total: 36.5 },
+      { name: 'Team รา', w1: 6, w2: 9, w3: 3, w4: 4, w5: 3, total: 25 } // ปรับคะแนนลง
     ]
   };
   const [activeFrameworkCard, setActiveFrameworkCard] = useState(null);
@@ -1284,35 +1284,171 @@ export default function ShowcaseLanding() {
         )}
       </AnimatePresence>
 
-      {/* 4.5 Literature Review */}
+      {/* 4.5 Theoretical Foundations & System Design */}
       <section className="py-24 bg-white relative border-t border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 relative z-10">
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
           <SectionHeading
-            title="เอกสารและงานวิจัยที่เกี่ยวข้อง"
-            subtitle="อ้างอิงบุคคลที่น่าเชื่อถือ หรือเจ้าของทฤษฏีต่างๆ"
+            title="รากฐานทฤษฎีนั่งร้านทางปัญญาและการออกแบบระบบ"
+            subtitle="(Theoretical Foundations & System Design)"
           />
-          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-200/50 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-            <ul className="space-y-4 relative z-10">
-              {[
-                "1.หลักสูตรแกนกลางและสาระการเรียนรู้เทคโนโลยีการออกแบบและเทคโนโลยี",
-                "2. การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E)",
-                "3. กระบวนการออกแบบเชิงวิศวกรรม (EDP)",
-                "4. ทฤษฎีฐานการช่วยเหลือ (Scaffolding Theory) และระบบบันทึกนำทาง (Scaffolded Logbook)",
-                "5. งานวิจัยที่เกี่ยวข้อง",
-                "6.กรอบแนวคิดการวิจัย"
-              ].map((text, i) => (
-                <li key={i} className="flex gap-4 items-center bg-white p-4 rounded-xl shadow-sm border border-slate-100/50 hover:border-blue-200 transition-colors">
-                  <div className="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center shrink-0">
-                    <Layers size={20} />
+
+          <div className="space-y-16">
+
+            {/* Block 1: Scaffolding Theory */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-3 bg-blue-100 text-blue-700 rounded-xl"><BookOpen size={24} /></div>
+                <h3 className="text-2xl font-bold text-slate-800">ต้นทางของทฤษฎีนั่งร้านทางปัญญา (Scaffolding Theory)</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Card 1: Vygotsky */}
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center shrink-0">
+                      <Users size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-900">Lev Vygotsky (1978)</h4>
+                      <p className="text-sm text-indigo-600 font-medium tracking-wide">Zone of Proximal Development (ZPD)</p>
+                    </div>
                   </div>
-                  <span className="text-slate-700 font-medium md:text-base text-sm leading-relaxed">{text}</span>
-                </li>
-              ))}
-            </ul>
+                  <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+                    ทฤษฎีฐานรากการช่วยเหลือ หรือ Scaffolding Theory มีพื้นฐานมาจากแนวคิด "ทฤษฎีพื้นที่รอยต่อแห่งการเรียนรู้ (Zone of Proximal Development - ZPD)" ของ Vygotsky, ซึ่งอธิบายว่า ศักยภาพในการเรียนรู้ของผู้เรียนถูกแบ่งออกเป็น 2 ระดับ คือ ระดับที่ผู้เรียนสามารถทำได้ด้วยตนเอง และระดับที่ผู้เรียนสามารถทำได้เมื่อได้รับความช่วยเหลือ การให้ "นั่งร้าน (Scaffolding)" จึงเปรียบเสมือนการใช้เครื่องมือ (Tools) หรือการให้คำแนะนำจากผู้เชี่ยวชาญ เพื่อพยุงให้ผู้เรียนสามารถก้าวข้ามขีดจำกัดความสามารถเดิมของตนเองไปสู่การสร้างองค์ความรู้หรือการแก้ปัญหาที่ซับซ้อนขึ้นได้
+                  </p>
+                </div>
+                {/* Card 2: Reiser */}
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0">
+                      <Monitor size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-900">Reiser (2004)</h4>
+                      <p className="text-sm text-blue-600 font-medium tracking-wide">Computer-based Scaffolding</p>
+                    </div>
+                  </div>
+                  <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+                    ผู้วิจัยได้นำทฤษฎีของ Vygotsky มาประยุกต์ใช้ในบริบทของเทคโนโลยีดิจิทัล (Computer-based Scaffolding) ตามแนวคิดของ Reiser ซึ่งเสนอว่าซอฟต์แวร์สามารถทำหน้าที่เป็น Scaffolding ได้ใน 2 ลักษณะสำคัญ คือ 1) การจัดโครงสร้างงาน (Structuring) เพื่อลดความซับซ้อนของภาระงาน และ 2) การกระตุ้นปัญหา (Problematizing) เพื่อบังคับให้ผู้เรียนหยุดคิดไตร่ตรองอย่างลึกซึ้ง
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Block 2: Origin of Scaffolded Logbook */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-50 to-orange-50 transform -skew-y-1 rounded-3xl -z-10"></div>
+              <div className="bg-white/80 backdrop-blur-md border border-amber-100 rounded-3xl p-8 md:p-12 shadow-sm">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="p-3 bg-amber-100 text-amber-700 rounded-xl"><Lightbulb size={24} /></div>
+                  <h3 className="text-2xl font-bold text-slate-800">ต้นทางของนวัตกรรม "ระบบบันทึกนำทาง (Scaffolded Logbook)"</h3>
+                </div>
+
+                <div className="space-y-8">
+                  <div className="flex gap-4">
+                    <div className="mt-1 text-rose-500 shrink-0"><AlertCircle size={24} /></div>
+                    <div>
+                      <h4 className="font-bold text-slate-800 mb-2">ต้นทางจากปัญหาในชั้นเรียน (Pain Points):</h4>
+                      <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+                        ผู้วิจัย (นายบุญวิชญ์ ปวโรภาส) พบข้อบกพร่องร้ายแรงจากการจัดการเรียนการสอนแบบเดิม (กิจกรรมสะพานต้านแรงโน้มถ่วง) คือ นักเรียนเกิดภาวะภาระทางปัญญา (Cognitive Overload) ไม่ยอมคิดวิเคราะห์ มักกระโดดข้ามขั้นตอนการวางแผนไปสู่การสร้างชิ้นงานทันที และเมื่อคิดไม่ออกก็จะคัดลอกผลงาน (Copy-paste) จากอินเทอร์เน็ตมาส่ง ผู้วิจัยจึงเกิดแรงบันดาลใจในการสร้างนวัตกรรม Web Application "EDP Smart Log" ที่มีฟังก์ชันบังคับกระบวนการคิด (Cognitive Forcing Function) เพื่อจัดระเบียบความคิดและล็อกการทำงานไม่ให้ข้ามขั้นตอน
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="mt-1 text-blue-500 shrink-0"><Search size={24} /></div>
+                    <div>
+                      <h4 className="font-bold text-slate-800 mb-2">ต้นทางจากงานวิจัยต่างประเทศ:</h4>
+                      <p className="text-slate-700 leading-relaxed text-sm md:text-base mb-4">
+                        การพัฒนา ระบบบันทึกนำทาง (Scaffolded Logbook) ได้รับการสนับสนุนแนวคิดจากงานวิจัยเชิงประจักษ์ในต่างประเทศ 2 เรื่องหลัก ได้แก่:
+                      </p>
+                      <ul className="space-y-4">
+                        <li className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                          <strong className="text-blue-900 block mb-1">1. งานวิจัยของ Quintana et al. (2019):</strong>
+                          <span className="text-slate-700 text-sm md:text-base">ศึกษาเรื่อง "Computer-based Scaffolding for Engineering Design" โดยสร้างซอฟต์แวร์ที่ชื่อ IdeaManager ซึ่งมีฟังก์ชัน Scaffolding เช่น การแจ้งเตือนข้อจำกัดและการบังคับให้ผู้เรียนร่างทางเลือก งานวิจัยนี้เป็นต้นทางที่พิสูจน์ว่าซอฟต์แวร์ช่วยยกระดับความสมเหตุสมผลของการออกแบบ (Design Rationale) และเป็นประโยชน์สูงสุดต่อนักเรียนกลุ่มอ่อน</span>
+                        </li>
+                        <li className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                          <strong className="text-blue-900 block mb-1">2. งานวิจัยของ Chou & Chen (2021):</strong>
+                          <span className="text-slate-700 text-sm md:text-base">ศึกษาการใช้ "Digital Engineering Logbook" ในชั้นเรียนหุ่นยนต์ ซึ่งเป็นต้นทางของแนวคิดที่ว่า สมุดบันทึกแบบดิจิทัลที่มีโครงสร้างนำทาง (Guided Structure) จะช่วยให้นักเรียนเชื่อมโยงทฤษฎีกับการปฏิบัติได้ดีขึ้น และการที่ระบบบันทึกข้อมูลแบบ Real-time จะช่วยให้ครูผู้สอนสามารถตรวจจับกลุ่มนักเรียนที่มีความเสี่ยงจะทำงานไม่สำเร็จ (At-risk groups) เพื่อเข้าไปช่วยเหลือได้ทันท่วงที</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 p-5 bg-emerald-50 border border-emerald-100 rounded-2xl">
+                    <div className="mt-1 text-emerald-600 shrink-0"><CheckCircle size={24} /></div>
+                    <p className="text-emerald-900 font-medium leading-relaxed text-sm md:text-base">
+                      แนวคิดทั้งหมดนี้จึงถูกนำมาหลอมรวมและพัฒนาเป็น ระบบบันทึกนำทาง (Scaffolded Logbook) เพื่อใช้ในการแก้ปัญหาการเรียนรู้และพัฒนาทักษะ กระบวนการออกแบบเชิงวิศวกรรม (EDP) ของนักเรียนในงานวิจัยนี้อย่างเป็นรูปธรรม
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Block 3: Missions Timeline */}
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-purple-100 text-purple-700 rounded-xl"><Layers size={24} /></div>
+                <h3 className="text-2xl font-bold text-slate-800">ขั้นตอนการดำเนินงานของ Scaffolding ผ่านแผนการจัดการเรียนรู้</h3>
+              </div>
+              <p className="text-slate-700 leading-relaxed text-sm md:text-base mb-10 max-w-4xl">
+                ผู้วิจัยได้นำทฤษฎี Scaffolding มาบูรณาการเข้ากับ กระบวนการออกแบบเชิงวิศวกรรม (EDP) และ การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E) โดยแฝงกระบวนการพยุงความคิดไว้ในนวัตกรรมที่เรียกว่า ระบบบันทึกนำทาง (Scaffolded Logbook) หรือ "EDP Smart Log" ซึ่งทำหน้าที่เป็น "Hard Scaffold" หรือโครงสร้างการคิด (Thinking Template), โดยมีขั้นตอนการดำเนินงานแบ่งเป็น "ภารกิจ (Missions)" ดังนี้:
+              </p>
+
+              <div className="relative border-l-2 border-slate-200 ml-6 md:ml-8 space-y-12 pb-8">
+                {/* Mission 1 */}
+                <div className="relative pl-8 md:pl-12">
+                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-blue-100 border-4 border-white flex items-center justify-center text-blue-600 font-black shadow-sm">1</div>
+                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                    <h4 className="font-bold text-lg text-blue-800 mb-3 flex items-center gap-2"><Target size={20} /> Mission 1: การพยุงความคิดในขั้นระบุปัญหา (The Problem Hunter)</h4>
+                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 1</span>
+                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+                      โดยระบบจะทำหน้าที่จัดโครงสร้างการคิด (Structuring) ให้นักเรียนวิเคราะห์ปัญหาด้วยเทคนิค 5W1H เพื่อจำกัดกรอบของปัญหาให้ชัดเจน, จากนั้นระบบจะทำหน้าที่กระตุ้นปัญหา (Problematizing) โดยแสดงผังความคิดแบบ Interactive ที่บังคับให้นักเรียนต้องพิมพ์ตอบคำถามด้วยเทคนิค "5 Whys (ทำไม 5 ครั้ง)" ลึกลงไปทีละระดับชั้น การบังคับกระบวนการคิดเช่นนี้เป็นการพยุงความคิดเพื่อไม่ให้นักเรียนข้ามขั้นตอนหรือด่วนสรุปปัญหาที่อาการภายนอก แต่ให้เจาะลึกไปถึงสาเหตุที่แท้จริง (Root Cause)
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mission 2 */}
+                <div className="relative pl-8 md:pl-12">
+                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-emerald-100 border-4 border-white flex items-center justify-center text-emerald-600 font-black shadow-sm">2</div>
+                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                    <h4 className="font-bold text-lg text-emerald-800 mb-3 flex items-center gap-2"><Lightbulb size={20} /> Mission 2: การพยุงความคิดในขั้นรวบรวมข้อมูลและออกแบบ (The Smart Designer)</h4>
+                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 2</span>
+                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+                      ระบบจะบังคับให้นักเรียนสร้าง "คลังความรู้ (Knowledge Bank)" โดยต้องสืบค้นข้อมูลและบันทึกแหล่งที่มาเพื่อตรวจสอบความซ้ำซ้อนและป้องกันการคัดลอก (Originality Check), จากนั้นระบบจะใช้กลไก "ตารางตัดสินใจ (Decision Matrix)" บังคับให้นักเรียนนำทางเลือกในการแก้ปัญหามาให้คะแนนเปรียบเทียบในด้านความเป็นไปได้ งบประมาณ และประสิทธิภาพ พร้อมทั้งมีฟีเจอร์ The Reality Check เพื่อบังคับให้ตอบคำถามตรวจสอบความเป็นจริงเชิงลึก การดำเนินการนี้ช่วยกลั่นกรองความคิดที่เป็นนามธรรมให้เหลือเพียงวิธีการที่ทำได้จริง
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mission 3 */}
+                <div className="relative pl-8 md:pl-12">
+                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-amber-100 border-4 border-white flex items-center justify-center text-amber-600 font-black shadow-sm">3</div>
+                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                    <h4 className="font-bold text-lg text-amber-800 mb-3 flex items-center gap-2"><Wrench size={20} /> Mission 3: การพยุงความคิดในขั้นดำเนินการแก้ปัญหา (The Maker)</h4>
+                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 3</span>
+                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+                      โดยระบบออกแบบฟังก์ชัน "บันทึกการสร้าง (Construction Log)" เพื่อควบคุมลำดับการทำงาน (Workflow) ก่อนเริ่มสร้างนักเรียนต้องกดยืนยันความปลอดภัย (Safety Check) และกำหนดเป้าหมายรายวัน, ระหว่างทำงาน ระบบจะบังคับให้อัปโหลดภาพความคืบหน้าแบบ Real-time และใช้ฟีเจอร์ "รายงานปัญหา (Bug Report)" ให้นักเรียนจดบันทึกอุปสรรคพร้อมวิธีแก้ไขปัญหาเฉพาะหน้า ซึ่งเป็นการพยุงความคิดไม่ให้เด็กท้อแท้เมื่อเผชิญปัญหาหน้างาน
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mission 4 */}
+                <div className="relative pl-8 md:pl-12">
+                  <div className="absolute -left-[1.35rem] top-1 w-10 h-10 rounded-full bg-rose-100 border-4 border-white flex items-center justify-center text-rose-600 font-black shadow-sm">4</div>
+                  <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                    <h4 className="font-bold text-lg text-rose-800 mb-3 flex items-center gap-2"><ShieldCheck size={20} /> Mission 4: การพยุงความคิดในขั้นทดสอบและประเมินผล (Testing & Debugging)</h4>
+                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-4">ดำเนินการในสัปดาห์ที่ 4</span>
+                    <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+                      ระบบจะปรับมุมมองของนักเรียนต่อความล้มเหลว โดยบังคับให้บันทึกผลการทดสอบอย่างโปร่งใสว่าเป็น Pass หรือ Fail, หากชิ้นงานไม่ผ่าน ระบบจะทำหน้าที่ Scaffolding โดยบังคับให้ถ่ายภาพจุดบกพร่อง (Failure Point) และบังคับให้วิเคราะห์เจาะลึกสาเหตุที่แท้จริงว่าเหตุใดชิ้นงานจึงพัง เพื่อนำไปสู่การวางแผนปรับปรุงแก้ไข (Redesign หรือ Optimization) ในขั้นตอนต่อไป
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
+
 
       {/* 5. Innovation Section */}
       <section id="innovation" className="py-24 bg-gradient-to-b from-blue-50 to-white">
@@ -1525,6 +1661,65 @@ export default function ShowcaseLanding() {
         </div>
       </section>
 
+      {/* --- SECTION: การรับรองคุณภาพเครื่องมือวิจัย (Expert Validation / IOC) --- */}
+      <div className="max-w-5xl mx-auto px-4 mt-16 mb-16">
+        <div className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+          {/* Background Decoration */}
+          <div className="absolute top-0 right-0 -mr-16 -mt-16 text-white/10">
+            <ShieldCheck size={250} />
+          </div>
+
+          <div className="relative z-10 text-white">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-emerald-500 p-3 rounded-2xl">
+                <ShieldCheck size={32} className="text-white" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold">การรับรองคุณภาพเครื่องมือวิจัย (IOC)</h3>
+            </div>
+
+            <p className="text-blue-100 text-lg mb-8 max-w-3xl leading-relaxed">
+              นวัตกรรมและเครื่องมือที่ใช้ในการวิจัยครั้งนี้ ผ่านการประเมินความเที่ยงตรงเชิงเนื้อหา (Content Validity) และหาค่าดัชนีความสอดคล้อง (IOC) จากผู้เชี่ยวชาญจำนวน 3 ท่าน โดยมีค่าเฉลี่ย IOC ผ่านเกณฑ์มาตรฐานระดับสูงในทุกรายการประเมิน
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Card 1 */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6">
+                <div className="text-amber-400 mb-3"><BookOpen size={28} /></div>
+                <h4 className="font-bold text-lg mb-2">แผนการจัดการเรียนรู้</h4>
+                <p className="text-sm text-blue-100">รูปแบบสืบเสาะหาความรู้ (5E) ร่วมกับ EDP จำนวน 5 แผนการเรียนรู้</p>
+              </div>
+              {/* Card 2 */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6">
+                <div className="text-blue-400 mb-3"><Monitor size={28} /></div>
+                <h4 className="font-bold text-lg mb-2">นวัตกรรม EDP Smart Logbook</h4>
+                <p className="text-sm text-blue-100">ระบบบันทึกนำทางอัจฉริยะ (โหมดนักเรียน และ โหมดครูผู้สอน)</p>
+              </div>
+              {/* Card 3 */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6">
+                <div className="text-emerald-400 mb-3"><Scale size={28} /></div>
+                <h4 className="font-bold text-lg mb-2">เกณฑ์การประเมินผล</h4>
+                <p className="text-sm text-blue-100">แบบประเมินทักษะกระบวนการออกแบบเชิงวิศวกรรม (Rubrics)</p>
+              </div>
+            </div>
+
+            <div className="border-t border-white/20 pt-6">
+              <h4 className="text-sm font-semibold text-blue-200 mb-4 uppercase tracking-wider">คณะผู้เชี่ยวชาญผู้ประเมินเครื่องมือ</h4>
+              <div className="flex flex-wrap gap-4">
+                <span className="inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm font-medium border border-slate-700/50">
+                  <CheckCircle size={16} className="text-emerald-400" /> นายชำนาญ เปตามะนัง
+                </span>
+                <span className="inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm font-medium border border-slate-700/50">
+                  <CheckCircle size={16} className="text-emerald-400" /> นางสาววรวรรณ แซ่ซิ้ม
+                </span>
+                <span className="inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm font-medium border border-slate-700/50">
+                  <CheckCircle size={16} className="text-emerald-400" /> นางสาววิมล สายทองมี
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* --- SECTION: วิเคราะห์ผลสัมฤทธิ์รายกลุ่มแบบเจาะลึก --- */}
       <section className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-5xl mx-auto px-4">
@@ -1532,6 +1727,48 @@ export default function ShowcaseLanding() {
             title="การประเมินทักษะ EDP เชิงลึกรายกลุ่ม"
             subtitle="คลิกที่ชื่อกลุ่มเพื่อดูรายละเอียดคะแนนและพัฒนาการในแต่ละสัปดาห์ (ข้อมูลจริง 15 กลุ่ม)"
           />
+
+          {/* --- แผนภูมิวงกลมสรุปภาพรวม (Overall Performance) --- */}
+          <div className="mb-16 bg-white p-8 rounded-3xl shadow-md border border-slate-200">
+            <h3 className="text-2xl font-bold text-center text-slate-800 mb-8">สรุปคุณภาพผลงานรวม 15 กลุ่ม</h3>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-12">
+
+              {/* แผนภูมิ Donut Chart (วาดด้วย SVG) */}
+              <div className="relative w-48 h-48">
+                <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
+                  {/* วงควรปรับปรุง (สีแดง) 1 กลุ่ม (6.7%) */}
+                  <path strokeDasharray="100 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f43f5e" strokeWidth="4" />
+                  {/* วงดี (สีฟ้า) 4 กลุ่ม (26.7%) + ดีเยี่ยม 10 กลุ่ม (66.6%) = 93.3% */}
+                  <path strokeDasharray="93.3 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#3b82f6" strokeWidth="4" />
+                  {/* วงดีเยี่ยม (สีเขียว) 10 กลุ่ม (66.6%) */}
+                  <path strokeDasharray="66.6 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10b981" strokeWidth="4" />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-3xl font-black text-slate-800">15</span>
+                  <span className="text-sm font-medium text-slate-500">กลุ่มทั้งหมด</span>
+                </div>
+              </div>
+
+              {/* คำอธิบายแผนภูมิ */}
+              <div className="space-y-4 w-full md:w-auto">
+                <div className="flex items-center gap-4 bg-emerald-50 px-6 py-3 rounded-xl border border-emerald-100">
+                  <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                  <div className="flex-1 font-bold text-emerald-900">ระดับ ดีเยี่ยม (≥ 80%)</div>
+                  <div className="text-2xl font-black text-emerald-600">10 <span className="text-sm font-medium">กลุ่ม</span></div>
+                </div>
+                <div className="flex items-center gap-4 bg-blue-50 px-6 py-3 rounded-xl border border-blue-100">
+                  <div className="w-4 h-4 rounded-full bg-blue-500"></div>
+                  <div className="flex-1 font-bold text-blue-900">ระดับ ดี (70-79%)</div>
+                  <div className="text-2xl font-black text-blue-600">4 <span className="text-sm font-medium">กลุ่ม</span></div>
+                </div>
+                <div className="flex items-center gap-4 bg-rose-50 px-6 py-3 rounded-xl border border-rose-100">
+                  <div className="w-4 h-4 rounded-full bg-rose-500"></div>
+                  <div className="flex-1 font-bold text-rose-900">ระดับ ควรปรับปรุง</div>
+                  <div className="text-2xl font-black text-rose-600">1 <span className="text-sm font-medium">กลุ่ม</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* ปุ่มสลับห้องเรียน */}
           <div className="flex justify-center mb-10">
@@ -1621,9 +1858,12 @@ export default function ShowcaseLanding() {
               <Lightbulb size={24} />
             </div>
             <div>
-              <h4 className="font-bold text-indigo-900 mb-2">ข้อค้นพบจากการวิเคราะห์รายกลุ่ม (Group Insight)</h4>
+              <h4 className="font-bold text-indigo-900 mb-2">ข้อค้นพบจากการวิเคราะห์พฤติกรรม (Group Insight)</h4>
+              <p className="text-sm text-indigo-800 leading-relaxed mb-3">
+                <strong>1. กลุ่มที่มีสมรรถนะสูง (High Performers):</strong> นักเรียนส่วนใหญ่ (10 จาก 15 กลุ่ม) สามารถทำคะแนนรวมได้ในระดับดีเยี่ยม สะท้อนให้เห็นว่าระบบบันทึกนำทางช่วยรักษามาตรฐานกระบวนการคิดไว้ได้ แม้จะต้องเผชิญกับภาวะกดดันด้านเวลาในช่วงสอบในสัปดาห์สุดท้ายก็ตาม
+              </p>
               <p className="text-sm text-indigo-800 leading-relaxed">
-                กลุ่มที่มีคะแนนนำเสนอ (W5) สูง เช่น <strong className="font-black">SHANNY</strong> และ <strong className="font-black">Zootopia</strong> สามารถทำคะแนนรวมทะลุ 40/50 ชี้ให้เห็นว่าระบบช่วยปรับพฤติกรรมให้เด็กมีความละเอียดรอบคอบตั้งแต่กระบวนการออกแบบ (W2) และลงมือสร้าง (W3) ซึ่งส่งผลให้การรวบรวมข้อมูลลง Auto-Portfolio ทำได้สมบูรณ์ ในขณะที่บางกลุ่มที่สอบตกในสัปดาห์ที่ 5 สะท้อนถึงการบริหารเวลาที่บกพร่องในช่วงปลายโปรเจกต์
+                <strong>2. กลุ่มที่ต้องได้รับการพัฒนา (Needs Improvement):</strong> พบข้อสังเกตจากกลุ่ม <strong>"Team รา"</strong> ที่สามารถระบุปัญหาและออกแบบได้ดีในสัปดาห์แรกๆ (W1-W2) แต่ในสัปดาห์ที่ 3-5 กลับไม่สามารถประดิษฐ์ชิ้นงานจริงออกมาได้ตามแผน ชี้ให้เห็นว่าระบบ Scaffolding บนหน้าจอเพียงอย่างเดียว อาจไม่เพียงพอสำหรับนักเรียนที่ขาดทักษะปฏิบัติการ (Hands-on Skills) ซึ่งผู้วิจัยจะนำประเด็นนี้ไปต่อยอด โดยการเพิ่มการช่วยเหลือแบบตัวต่อตัว (Human Coaching) ในวงรอบถัดไป
               </p>
             </div>
           </div>
