@@ -1310,17 +1310,22 @@ export default function ShowcaseLanding() {
                 <h4 className="font-bold text-slate-800 mb-4">ดาวน์โหลดเอกสารงานวิจัยและแผนการสอน</h4>
                 <div className="space-y-3">
                   {[
-                    { file: "lesson-plan-1.pdf", title: "แผนที่ 6: การระบุและวิเคราะห์ปัญหา (Week 1)" },
-                    { file: "lesson-plan-2.pdf", title: "แผนที่ 7: การรวบรวมข้อมูลและวางแผนแก้ปัญหา (Week 2)" },
-                    { file: "lesson-plan-3.pdf", title: "แผนที่ 8: ดำเนินการแก้ไขปัญหา (Week 3)" },
-                    { file: "lesson-plan-4.pdf", title: "แผนที่ 9: การทดสอบและประเมินผล (Week 4)" },
-                    { file: "lesson-plan-5.pdf", title: "แผนที่ 10: การนำเสนอและประเมินผลรวบยอด (Week 5)" }
+                    { file: "lesson-plan-1.pdf", title: "แผนที่ 6: การระบุและวิเคราะห์ปัญหา (Week 1)", num: 1 },
+                    { file: "lesson-plan-2.pdf", title: "แผนที่ 7: การรวบรวมข้อมูลและวางแผนแก้ปัญหา (Week 2)", num: 2 },
+                    { file: "lesson-plan-3.pdf", title: "แผนที่ 8: ดำเนินการแก้ไขปัญหา (Week 3)", num: 3 },
+                    { file: "lesson-plan-4.pdf", title: "แผนที่ 9: การทดสอบและประเมินผล (Week 4)", num: 4 },
+                    { file: "lesson-plan-5.pdf", title: "แผนที่ 10: การนำเสนอและประเมินผลรวบยอด (Week 5)", num: 5 }
                   ].map((plan, idx) => (
-                    <a key={idx} href={`/downloads/${plan.file}`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 hover:-translate-y-1 transition-all duration-200 text-sm group shadow-sm">
+                    <a key={idx} href={`./downloads/${plan.file}`} target="_blank" rel="noopener noreferrer" download={`แผนการสอนที่-${plan.num}.pdf`} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors text-sm group shadow-sm hover:-translate-y-1 duration-200">
                       <span className="font-medium text-slate-700 group-hover:text-blue-800">{plan.title}</span>
                       <Download size={18} className="text-blue-600 group-hover:scale-110 transition-transform" />
                     </a>
                   ))}
+                  {/* เล่มวิจัยฉบับเต็ม */}
+                  <a href="./downloads/full-research.pdf" target="_blank" rel="noopener noreferrer" download="วิจัยในชั้นเรียน-ฉบับเต็ม.pdf" className="flex items-center justify-between p-3 mt-4 bg-blue-600 border border-blue-700 rounded-lg hover:bg-blue-700 transition-colors text-sm text-white shadow-md group border-t border-blue-500">
+                    <span className="font-bold">เล่มวิจัยฉบับเต็ม (Full Research)</span>
+                    <Download size={18} className="text-white group-hover:scale-110 transition-transform" />
+                  </a>
                 </div>
               </div>
             </div>
@@ -1433,72 +1438,103 @@ export default function ShowcaseLanding() {
       </section>
 
       {/* 7. Research Results */}
-      <section className="py-24 bg-slate-900 text-white relative overflow-hidden">
+      <section id="results" className="py-24 bg-slate-900 text-white relative overflow-hidden border-t border-slate-800">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '30px 30px' }}></div>
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <SectionHeading
             title={<span className="text-white">สรุปผลการวิจัยเชิงประจักษ์</span>}
-            subtitle={<span className="text-slate-400">หลักฐานเชิงประจักษ์จากการดำเนินการวิจัย 5 สัปดาห์ ตอบสมมติฐานH1 และ H2</span>}
+            subtitle={<span className="text-slate-400">หลักฐานเชิงประจักษ์จากการดำเนินการวิจัย 5 สัปดาห์ ตอบสมมติฐาน H1 และ H2</span>}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          {/* Top Metric Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 mb-12">
+            {[
+              { label: "Task Completion", value: "100%", sub: "ทุกกลุ่มส่งงานสำเร็จตามเวลา", icon: CheckCircle, colorClass: "text-emerald-400" },
+              { label: "Plagiarism Rate", value: "0%", sub: "ไม่พบการคัดลอกด้วย Gatekeeper", icon: ShieldCheck, colorClass: "text-blue-400" },
+              { label: "Average Score", value: "78.82%", sub: "39.41/50 (ระดับคุณภาพ: ดี)", icon: TrendingUp, colorClass: "text-indigo-400" },
+              { label: "Satisfaction", value: "4.65", sub: "เต็ม 5.00 (ระดับคุณภาพ: มากที่สุด)", icon: Star, colorClass: "text-amber-400" }
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700/50 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors"
+              >
+                <stat.icon size={28} className={`${stat.colorClass} mb-3`} />
+                <div className="text-3xl font-black mb-1">{stat.value}</div>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{stat.label}</div>
+                <div className="text-[10px] text-slate-500">{stat.sub}</div>
+              </motion.div>
+            ))}
+          </div>
 
-            {/* Result 1: EDP Skills */}
-            <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-amber-400 transition-colors relative overflow-hidden">
-              <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl"></div>
-              <div className="w-14 h-14 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center mb-6">
-                <Target size={32} />
-              </div>
-              <h3 className="text-xl font-bold mb-1">สมมติฐาน H1: ผ่านเกณฑ์</h3>
-              <p className="text-amber-400 text-sm font-semibold mb-4">ทักษะกระบวนการออกแบบเชิงวิศวกรรม (EDP)</p>
-              <p className="text-slate-300 text-sm mb-6 leading-relaxed">
-                นักเรียนมีคะแนนทักษะ EDP ผ่านเกณฑ์ร้อยละ 70 ตามสมมติฐานที่ตั้งไว้ โดยประเมินจากชิ้นงานรวบยอด (Summative Rubric)
-              </p>
-              <div className="flex items-end gap-2">
-                <div className="text-5xl font-black text-amber-400">24.5</div>
-                <div className="text-slate-400 mb-1">/ 28 คะแนนเฉลี่ย</div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left: Weekly EDP Performance Progress Bars */}
+            <div className="lg:col-span-8 bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-2xl">
+              <h3 className="text-xl font-bold mb-6 flex items-center gap-3 border-b border-slate-700 pb-4">
+                <Target className="text-blue-400" /> สมมติฐาน H1: ทักษะ EDP (รายสัปดาห์)
+              </h3>
+              <div className="space-y-6">
+                {[
+                  { w: 1, label: "การระบุปัญหา", score: 7.15, pct: 71.5, qual: "ดี", bgClass: "bg-blue-500", badgeClass: "bg-blue-500/20 text-blue-400" },
+                  { w: 2, label: "การออกแบบ", score: 9.07, pct: 90.7, qual: "ดีเยี่ยม", bgClass: "bg-indigo-500", badgeClass: "bg-indigo-500/20 text-indigo-400" },
+                  { w: 3, label: "การลงมือสร้าง", score: 9.42, pct: 94.2, qual: "ดีเยี่ยม", bgClass: "bg-emerald-500", badgeClass: "bg-emerald-500/20 text-emerald-400" },
+                  { w: 4, label: "การทดสอบ", score: 8.95, pct: 89.5, qual: "ดีเยี่ยม", bgClass: "bg-emerald-500", badgeClass: "bg-emerald-500/20 text-emerald-400" },
+                  { w: 5, label: "การนำเสนอ (Pitching)", score: 4.82, pct: 48.2, qual: "พอใช้", bgClass: "bg-amber-500", badgeClass: "bg-amber-500/20 text-amber-500" }
+                ].map((bar, i) => (
+                  <div key={i} className="group">
+                    <div className="flex justify-between items-end mb-2">
+                      <div className="font-semibold text-sm">
+                        <span className="text-slate-400 mr-2">Week {bar.w}:</span>
+                        {bar.label}
+                      </div>
+                      <div className="text-right">
+                        <span className="font-bold text-lg leading-none">{bar.score}</span>
+                        <span className="text-slate-500 text-xs ml-1">/ 10</span>
+                        <span className={`ml-3 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${bar.badgeClass}`}>
+                          {bar.qual}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="h-4 w-full bg-slate-900 rounded-full overflow-hidden relative">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${bar.pct}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, delay: i * 0.1, type: "spring" }}
+                        className={`absolute top-0 left-0 h-full rounded-full ${bar.bgClass}`}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Result 2: Behavior */}
-            <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-amber-400 transition-colors">
-              <div className="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center mb-6">
-                <CheckCircle size={32} />
+            {/* Right: Insight & Discussion Box */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-4 bg-gradient-to-br from-indigo-900/50 to-blue-900/50 p-8 rounded-3xl border border-indigo-500/30 shadow-2xl relative overflow-hidden flex flex-col justify-center h-full"
+            >
+              <div className="absolute -top-10 -right-10 text-indigo-500/10 pointer-events-none">
+                <Lightbulb size={160} />
               </div>
-              <h3 className="text-xl font-bold mb-1">ผลด้านพฤติกรรมการเรียนรู้</h3>
-              <p className="text-emerald-400 text-sm font-semibold mb-4">หลักฐานเชิงประจักษ์จาก Digital Footprint</p>
-              <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                แก้ปัญหาการคัดลอกชิ้นงานและการข้ามขั้นตอนได้อย่างเด็ดขาด ผ่านระบบ Digital Footprint ที่บังคับให้ผู้เรียนอธิบายด้วยภาษาของตนเองในทุกขั้นตอน
-              </p>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between border-b border-slate-700 pb-2 text-slate-300">
-                  <span>การคัดลอกชิ้นงาน (Plagiarism)</span>
-                  <span className="text-emerald-400 font-bold">0%</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-700 pb-2 text-slate-300">
-                  <span>การข้ามขั้นตอน (Step-skipping)</span>
-                  <span className="text-emerald-400 font-bold">ลดลงเด็ดขาด</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Result 3: Satisfaction */}
-            <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-amber-400 transition-colors">
-              <div className="w-14 h-14 bg-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center mb-6">
-                <Star size={32} />
-              </div>
-              <h3 className="text-xl font-bold mb-1">สมมติฐาน H2: ผ่านเกณฑ์</h3>
-              <p className="text-pink-400 text-sm font-semibold mb-4">ความพึงพอใจของนักเรียนต่อระบบ</p>
-              <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                นักเรียนมีความพึงพอใจต่อระบบในระดับ“มากที่สุด” โดยระบุว่าระบบช่วยจัดระเบียบความคิดและลดภาระงานซ้ำซ้อน
-              </p>
-              <div className="bg-slate-700/50 p-3 rounded-xl border border-slate-600">
-                <p className="text-xs text-amber-200 italic leading-relaxed">
-                  “แอปช่วยให้รู้ว่าต้องทำอะไรต่อ ไม่หลงทาง และตอนพรีเซนต์ไม่ต้องทำ PowerPoint ใหม่เลย!” — เสียงสะท้อน (Reflection) สัปดาห์ที่ 5
+              <h3 className="text-xl font-bold mb-4 text-indigo-300 flex items-center gap-2 relative z-10">
+                <Lightbulb size={24} className="text-amber-400" /> Discussion & Insight
+              </h3>
+              <div className="relative z-10 space-y-4 text-sm leading-relaxed text-indigo-100">
+                <p>
+                  ผลวิจัยชี้ให้เห็นว่าระบบ <strong className="text-white font-semibold">Scaffolded Logbook ช่วยยกระดับทักษะการออกแบบและสร้าง (W2-W4) ได้ถึงระดับดีเยี่ยม</strong> เนื่องจากช่วยลดภาระทางปัญญา (Cognitive Overload)
                 </p>
+                <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl text-amber-200 mt-6 shadow-inner">
+                  <p className="font-bold mb-2 flex items-center gap-2 text-amber-400"><TrendingUp size={16} /> ประเด็นการพัฒนาต่อยอด</p>
+                  <p className="text-xs leading-relaxed">คะแนนที่ลดลงในสัปดาห์ที่ 5 สะท้อนให้เห็นว่านักเรียนยังขาดความมั่นใจในการสื่อสารสาธารณะ (Public Speaking) ซึ่งเป็นประเด็นสำคัญที่จะนำไปพัฒนาต่อยอดในเฟสถัดไป</p>
+                </div>
               </div>
-            </div>
-
+            </motion.div>
           </div>
         </div>
       </section>
