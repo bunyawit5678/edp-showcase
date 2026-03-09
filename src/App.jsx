@@ -858,7 +858,7 @@ export default function ShowcaseLanding() {
       </nav>
 
       {/* 2. Hero */}
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white pt-24 pb-16">
+      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950 text-white py-24 md:py-32">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20 pointer-events-none">
           <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
@@ -876,22 +876,20 @@ export default function ShowcaseLanding() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-block py-1.5 px-4 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-semibold tracking-widest uppercase mb-8"
+            className="inline-block py-1.5 px-4 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 text-sm font-semibold tracking-widest mb-8"
           >
-            วิจัยปฏิบัติการในชั้นเรียน (Educational Action Research)
+            รายงานวิจัยปฏิบัติการในชั้นเรียน โรงเรียนหอวัง
           </motion.span>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-8 text-white tracking-tight"
+            className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-relaxed max-w-5xl mx-auto text-center mb-8 break-keep"
           >
-            การพัฒนาทักษะกระบวนการออกแบบเชิงวิศวกรรม<br className="hidden md:block" />
-            ของนักเรียนชั้นมัธยมศึกษาปีที่ 3 โรงเรียนหอวัง<br className="hidden lg:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-400 leading-normal inline-block mt-2">
-              โดยใช้การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E Models)
-            </span><br />
+            การพัฒนาทักษะกระบวนการออกแบบเชิงวิศวกรรม <br className="hidden lg:block" />
+            ของนักเรียนชั้นมัธยมศึกษาปีที่ 3 โรงเรียนหอวัง <br className="hidden lg:block" />
+            โดยใช้การจัดการเรียนรู้แบบสืบเสาะหาความรู้ (5E Models) <br className="hidden lg:block" />
             ร่วมกับระบบบันทึกนำทาง (Scaffolded Logbook)
           </motion.h1>
 
@@ -908,10 +906,10 @@ export default function ShowcaseLanding() {
             transition={{ duration: 0.6, delay: 1 }}
             className="mb-12"
           >
-            <p className="text-blue-200 text-base md:text-lg mb-2">
-              <span className="font-semibold text-white">ผู้วิจัย:</span> นายบุญวิชญ์ ปวโรภาส
+            <p className="text-white text-lg md:text-xl font-medium mb-2 opacity-90">
+              <span className="font-semibold">ผู้วิจัย:</span> นายบุญวิชญ์ ปวโรภาส
             </p>
-            <p className="text-blue-300 text-sm md:text-base opacity-80">
+            <p className="text-blue-200 text-sm md:text-base opacity-80">
               รายวิชาคอมพิวเตอร์เพื่อการออกแบบ 3 &nbsp;|&nbsp; โรงเรียนหอวัง
             </p>
           </motion.div>
@@ -1451,7 +1449,7 @@ export default function ShowcaseLanding() {
             {[
               { label: "Task Completion", value: "100%", sub: "ทุกกลุ่มส่งงานสำเร็จตามเวลา", icon: CheckCircle, colorClass: "text-emerald-400" },
               { label: "Plagiarism Rate", value: "0%", sub: "ไม่พบการคัดลอกด้วย Gatekeeper", icon: ShieldCheck, colorClass: "text-blue-400" },
-              { label: "Average Score", value: "78.82%", sub: "39.41/50 (ระดับคุณภาพ: ดี)", icon: TrendingUp, colorClass: "text-indigo-400" },
+              { label: "Average Score", value: "86.68%", sub: "43.34/50 (ระดับคุณภาพ: ดีเยี่ยม)", icon: TrendingUp, colorClass: "text-indigo-400" },
               { label: "Satisfaction", value: "4.65", sub: "เต็ม 5.00 (ระดับคุณภาพ: มากที่สุด)", icon: Star, colorClass: "text-amber-400" }
             ].map((stat, i) => (
               <motion.div
@@ -1482,7 +1480,7 @@ export default function ShowcaseLanding() {
                   { w: 2, label: "การออกแบบ", score: 9.07, pct: 90.7, qual: "ดีเยี่ยม", bgClass: "bg-indigo-500", badgeClass: "bg-indigo-500/20 text-indigo-400" },
                   { w: 3, label: "การลงมือสร้าง", score: 9.42, pct: 94.2, qual: "ดีเยี่ยม", bgClass: "bg-emerald-500", badgeClass: "bg-emerald-500/20 text-emerald-400" },
                   { w: 4, label: "การทดสอบ", score: 8.95, pct: 89.5, qual: "ดีเยี่ยม", bgClass: "bg-emerald-500", badgeClass: "bg-emerald-500/20 text-emerald-400" },
-                  { w: 5, label: "การนำเสนอ (Pitching)", score: 4.82, pct: 48.2, qual: "พอใช้", bgClass: "bg-amber-500", badgeClass: "bg-amber-500/20 text-amber-500" }
+                  { w: 5, label: "การนำเสนอ (Pitching)", score: 8.75, pct: 87.5, qual: "ดีเยี่ยม", bgClass: "bg-emerald-500", badgeClass: "bg-emerald-500/20 text-emerald-400" }
                 ].map((bar, i) => (
                   <div key={i} className="group">
                     <div className="flex justify-between items-end mb-2">
@@ -1526,12 +1524,24 @@ export default function ShowcaseLanding() {
                 <Lightbulb size={24} className="text-amber-400" /> Discussion & Insight
               </h3>
               <div className="relative z-10 space-y-4 text-sm leading-relaxed text-indigo-100">
-                <p>
-                  ผลวิจัยชี้ให้เห็นว่าระบบ <strong className="text-white font-semibold">Scaffolded Logbook ช่วยยกระดับทักษะการออกแบบและสร้าง (W2-W4) ได้ถึงระดับดีเยี่ยม</strong> เนื่องจากช่วยลดภาระทางปัญญา (Cognitive Overload)
-                </p>
+                <div>
+                  <h4 className="font-bold text-amber-400 flex items-center gap-2 mb-1"><CheckCircle size={14} className="text-emerald-400" /> บทสรุปผลการวิจัย (Chapter 5)</h4>
+                  <p>ผลการวิจัยพบว่านักเรียนมีทักษะ EDP ในระดับดีเยี่ยม (ร้อยละ 86.68) ระบบ EDP Smart Log ช่วยรักษามาตรฐานการทำงานได้ดีเยี่ยมแม้ในช่วงที่มีภาระงานสูง ระบบอัตโนมัติช่วยให้การสรุปบทเรียนรวดเร็วและมีคุณภาพ</p>
+                </div>
+
+                <div className="pt-3 border-t border-indigo-500/30">
+                  <h4 className="font-bold text-amber-400 flex items-center gap-2 mb-1"><Search size={14} className="text-blue-400" /> ข้อค้นพบเพิ่มเติม (Chapter 4)</h4>
+                  <p>จากการติดตามผลการดำเนินงานในสัปดาห์ที่ 5 พบว่าข้อจำกัดด้านเวลาในช่วงการทดสอบของสถานศึกษาทำให้การส่งงานล่าช้าเล็กน้อย แต่คุณภาพเชิงประจักษ์และการนำเสนอผ่านระบบ Auto-Portfolio ยังคงอยู่ในระดับดีเยี่ยม โดยมีคะแนนเฉลี่ยที่ 8.75 (ร้อยละ 87.50)</p>
+                </div>
+
+                <div className="pt-3 border-t border-indigo-500/30">
+                  <h4 className="font-bold text-amber-400 flex items-center gap-2 mb-1"><Lightbulb size={14} className="text-amber-400" /> อภิปรายผล (Discussion)</h4>
+                  <p>ระบบช่วยลดภาระทางปัญญา (Cognitive Overload) ในช่วงสัปดาห์ที่ 2-4 ส่งผลให้ทักษะการออกแบบและสร้างอยู่ในระดับดีเยี่ยม</p>
+                </div>
+
                 <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl text-amber-200 mt-6 shadow-inner">
-                  <p className="font-bold mb-2 flex items-center gap-2 text-amber-400"><TrendingUp size={16} /> ประเด็นการพัฒนาต่อยอด</p>
-                  <p className="text-xs leading-relaxed">คะแนนที่ลดลงในสัปดาห์ที่ 5 สะท้อนให้เห็นว่านักเรียนยังขาดความมั่นใจในการสื่อสารสาธารณะ (Public Speaking) ซึ่งเป็นประเด็นสำคัญที่จะนำไปพัฒนาต่อยอดในเฟสถัดไป</p>
+                  <p className="font-bold mb-2 flex items-center gap-2 text-amber-400"><TrendingUp size={16} /> ข้อเสนอแนะเพื่อการพัฒนา (Future Work)</p>
+                  <p className="text-xs leading-relaxed">เตรียมพัฒนาฟีเจอร์ส่งเสริมทักษะการสื่อสารสาธารณะ (Public Speaking) เพื่อลดช่องว่างความมั่นใจในขั้นตอนการนำเสนอผลงาน</p>
                 </div>
               </div>
             </motion.div>
